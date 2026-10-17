@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>N2 icon</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Klee+One:wght@600&display=block">
+<style>
+/* 앱 아이콘 원본: 브라우저로 512·192 크기 스크린샷을 찍어 PNG로 만든다. 내용은 가운데 70% 안에 둬서 마스크형 아이콘에도 쓴다. */
+html, body { margin: 0; width: 100vw; height: 100vh; overflow: hidden; background: #27358a; }
+.icon { width: 100vw; height: 100vh; display: grid; place-items: center; background: radial-gradient(circle at 30% 20%, #3446a8, #27358a 70%); }
+.card {
+  width: 50vw; height: 50vw; border-radius: 8.5vw; background: #f7f5ee; display: grid; place-items: center; position: relative;
+  box-shadow: 0 2.4vw 0 #1a2566;
+}
+.kanji { font-family: "Klee One", serif; font-weight: 600; font-size: 31vw; line-height: 1; color: #1a1f3b; margin-top: -2vw; }
+.tag {
+  position: absolute; right: -4vw; bottom: -3.5vw; background: #c23149; color: #fff; font: 700 9vw/1 system-ui, sans-serif;
+  padding: 2.2vw 3vw; border-radius: 4vw; letter-spacing: -.02em;
+}
+</style>
+</head>
+<body>
+<div class="icon"><div class="card"><span class="kanji">単</span><span class="tag">N2</span></div></div>
+</body>
+</html>
