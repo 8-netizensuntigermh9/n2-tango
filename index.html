@@ -1,0 +1,1109 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>N2 단어장</title>
+<meta name="description" content="JLPT N2 핵심 단어를 예문과 함께 외우는 휴대폰용 단어장">
+<meta name="theme-color" content="#27358a" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#10131f" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap">
+<style>
+/* Layout: 한 손 사용 — 얇은 머리줄, 가운데 스크롤 영역, 엄지가 닿는 하단 탭바와 큰 버튼 */
+:root {
+  --bg: #f2f3f8; --surface: #ffffff; --surface-2: #f6f7fb; --ink: #1a1f3b; --muted: #5b6282; --line: #dde0eb;
+  --ai: #27358a; --ai-ink: #ffffff; --ai-soft: #e5e8f6;
+  --ok: #24704b; --ok-soft: #dff1e7; --ng: #b92c43; --ng-soft: #fbe4e8; --mark: #fff0b3; --mark-ink: #1a1f3b;
+  --shadow: 0 1px 2px rgba(20, 26, 60, .06), 0 8px 24px rgba(20, 26, 60, .07);
+  --font-jp: "Klee One", "Hiragino Maru Gothic ProN", "Yu Gothic", "Noto Sans JP", "Noto Sans CJK JP", sans-serif;
+  --font-ui: system-ui, -apple-system, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  --r: 18px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #10131f; --surface: #191d2e; --surface-2: #20253a; --ink: #e8eaf5; --muted: #a0a6c3; --line: #2c3250;
+    --ai: #93a3f5; --ai-ink: #10131f; --ai-soft: #252c50;
+    --ok: #6fd39c; --ok-soft: #1b3428; --ng: #ff8597; --ng-soft: #3d1d26; --mark: #5a4a12; --mark-ink: #fff4cc;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #10131f; --surface: #191d2e; --surface-2: #20253a; --ink: #e8eaf5; --muted: #a0a6c3; --line: #2c3250;
+  --ai: #93a3f5; --ai-ink: #10131f; --ai-soft: #252c50;
+  --ok: #6fd39c; --ok-soft: #1b3428; --ng: #ff8597; --ng-soft: #3d1d26; --mark: #5a4a12; --mark-ink: #fff4cc;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--font-ui); font-size: 16px; line-height: 1.55;
+  -webkit-tap-highlight-color: transparent; overscroll-behavior-y: none;
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--ai); outline-offset: 2px; }
+[hidden] { display: none !important; }
+.app { display: grid; grid-template-rows: auto 1fr auto; height: 100%; height: 100dvh; }
+
+/* 머리줄 */
+.top {
+  display: flex; align-items: center; gap: 10px;
+  padding: calc(env(safe-area-inset-top, 0px) + 10px) 16px 10px;
+  background: var(--bg);
+}
+.seal {
+  width: 32px; height: 32px; border-radius: 9px; background: var(--ai); color: var(--ai-ink);
+  display: grid; place-items: center; font-family: var(--font-jp); font-weight: 600; font-size: 15px; letter-spacing: -.02em;
+}
+.top h1 { font-size: 17px; margin: 0; font-weight: 700; letter-spacing: -.01em; flex: 1; }
+.icon-btn {
+  width: 44px; height: 44px; border: 0; background: transparent; border-radius: 12px;
+  display: inline-grid; place-items: center; color: var(--muted); flex: none;
+}
+.icon-btn:active { background: var(--ai-soft); }
+.icon-btn svg { width: 22px; height: 22px; }
+
+/* 본문 */
+main { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.view { max-width: 560px; margin: 0 auto; padding-inline: 16px; padding-block: 4px 24px; }
+
+/* 하단 탭바 */
+.tabs {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  background: var(--surface); border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.tab {
+  border: 0; background: transparent; padding: 8px 4px 10px; display: grid; justify-items: center; gap: 2px;
+  color: var(--muted); font-size: 12.5px; font-weight: 600; position: relative; min-height: 58px;
+}
+.tab svg { width: 24px; height: 24px; }
+.tab[aria-selected="true"] { color: var(--ai); }
+.tab[aria-selected="true"]::before {
+  content: ""; position: absolute; top: 0; left: 30%; right: 30%; height: 3px; border-radius: 0 0 3px 3px; background: var(--ai);
+}
+.badge {
+  position: absolute; top: 5px; left: calc(50% + 8px); min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px;
+  background: var(--ng); color: #fff; font-size: 11px; line-height: 18px; font-variant-numeric: tabular-nums;
+}
+
+#view-study:not([hidden]) { min-height: 100%; display: flex; flex-direction: column; }
+#view-study .card { flex: 1; }
+
+/* 진도 줄 */
+.stats { display: grid; gap: 6px; padding: 6px 2px 14px; }
+.stats-row { display: flex; align-items: baseline; gap: 6px; font-size: 14px; color: var(--muted); }
+.stats-row b { color: var(--ink); font-size: 18px; font-variant-numeric: tabular-nums; }
+.stats-row .push { margin-left: auto; }
+.meter { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.meter i { display: block; height: 100%; background: var(--ai); border-radius: 3px; transition: width .3s; }
+
+/* 단어 카드 */
+.card {
+  background: var(--surface); border-radius: var(--r); box-shadow: var(--shadow);
+  padding: 16px 18px 20px; min-height: 340px; display: flex; flex-direction: column; position: relative;
+}
+.card-top { display: flex; align-items: center; gap: 6px; min-height: 44px; }
+.chip {
+  display: inline-flex; align-items: center; height: 24px; padding: 0 9px; border-radius: 12px;
+  font-size: 12px; font-weight: 600; background: var(--surface-2); color: var(--muted); border: 1px solid var(--line);
+}
+.chip.new { background: var(--ai-soft); color: var(--ai); border-color: transparent; }
+.chip.hard { background: var(--ng-soft); color: var(--ng); border-color: transparent; }
+.chip.done { background: var(--ok-soft); color: var(--ok); border-color: transparent; }
+.card-top .icon-btn { margin-left: auto; color: var(--ai); }
+.face { flex: 1; display: grid; place-content: center; text-align: center; padding: 14px 0 6px; cursor: pointer; }
+.reading { font-size: 17px; color: var(--muted); letter-spacing: .06em; min-height: 26px; font-family: var(--font-jp); }
+.word { font-family: var(--font-jp); font-weight: 600; font-size: clamp(42px, 13vw, 60px); line-height: 1.2; letter-spacing: .02em; word-break: keep-all; }
+.hint { text-align: center; color: var(--muted); font-size: 13px; margin: 6px 0 0; }
+.back { border-top: 1px dashed var(--line); margin-top: 12px; padding-top: 14px; display: grid; gap: 10px; }
+.meaning { font-size: 21px; font-weight: 700; text-align: center; }
+.ex { background: var(--surface-2); border-radius: 12px; padding: 12px 12px 12px 14px; display: grid; grid-template-columns: 1fr auto; gap: 2px 6px; align-items: start; }
+.ex .ja { font-family: var(--font-jp); font-size: 18px; line-height: 1.6; margin: 0; min-width: 0; }
+.ex .ko { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: 14.5px; }
+.ex .icon-btn { width: 40px; height: 40px; color: var(--ai); }
+mark { background: var(--mark); color: var(--mark-ink); border-radius: 3px; padding: 0 1px; }
+.link { border: 0; background: none; color: var(--ai); font-weight: 600; font-size: 14.5px; padding: 8px 4px; }
+.back .link { justify-self: center; display: inline-flex; align-items: center; gap: 6px; }
+.back .link svg { width: 18px; height: 18px; }
+
+.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+.actions.one { grid-template-columns: 1fr; }
+.btn {
+  border: 1px solid transparent; border-radius: 14px; min-height: 52px; padding: 0 16px; font-weight: 700; font-size: 16px;
+  background: var(--surface); color: var(--ink); border-color: var(--line);
+}
+.btn.big { min-height: 58px; font-size: 17px; }
+.btn.primary { background: var(--ai); color: var(--ai-ink); border-color: var(--ai); }
+.btn.ok { background: var(--ok-soft); color: var(--ok); border-color: var(--ok-soft); }
+.btn.ng { background: var(--ng-soft); color: var(--ng); border-color: var(--ng-soft); }
+.btn.ghost { background: transparent; }
+.btn.small { min-height: 40px; font-size: 14.5px; padding: 0 12px; border-radius: 11px; }
+.btn:disabled { opacity: .5; cursor: default; }
+.btn:active:not(:disabled) { transform: translateY(1px); }
+.sub { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 14px; margin-top: 6px; padding-inline: 2px; }
+.sub b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* 완료·안내 블록 */
+.panel { background: var(--surface); border-radius: var(--r); box-shadow: var(--shadow); padding: 22px 18px; display: grid; gap: 14px; }
+.panel h2 { margin: 0; font-size: 20px; text-wrap: balance; }
+.panel p { margin: 0; color: var(--muted); }
+.figures { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.figure { background: var(--surface-2); border-radius: 12px; padding: 10px 8px; text-align: center; }
+.figure b { display: block; font-size: 22px; font-variant-numeric: tabular-nums; }
+.figure span { font-size: 12.5px; color: var(--muted); }
+.stack { display: grid; gap: 10px; }
+
+/* 퀴즈 */
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; background: var(--surface-2); border: 1px solid var(--line); border-radius: 13px; padding: 3px; gap: 3px; }
+.seg button { border: 0; background: transparent; border-radius: 10px; min-height: 42px; font-size: 14.5px; font-weight: 600; color: var(--muted); padding: 0 6px; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ai); box-shadow: 0 1px 3px rgba(20, 26, 60, .12); }
+.field-label { font-size: 13px; font-weight: 700; color: var(--muted); margin: 0 0 6px; letter-spacing: .02em; }
+.q-head { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 14px; margin: 2px 2px 10px; font-variant-numeric: tabular-nums; }
+.q-card { background: var(--surface); border-radius: var(--r); box-shadow: var(--shadow); padding: 22px 16px; text-align: center; display: grid; gap: 4px; }
+.q-card .word { font-size: clamp(38px, 12vw, 52px); }
+.q-card .q-text { font-size: 22px; font-weight: 700; }
+.q-card .q-ask { color: var(--muted); font-size: 14px; }
+.options { display: grid; gap: 10px; margin-top: 14px; }
+.opt {
+  min-height: 56px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--surface); text-align: left;
+  padding: 10px 16px; font-size: 16.5px; font-weight: 600; display: flex; align-items: center; gap: 10px;
+}
+.opt.jp { font-family: var(--font-jp); font-size: 21px; font-weight: 600; }
+.opt.right { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+.opt.wrong { border-color: var(--ng); background: var(--ng-soft); color: var(--ng); }
+.opt .mk { margin-left: auto; font-size: 14px; font-weight: 700; }
+.explain { margin-top: 12px; background: var(--surface); border-radius: 14px; padding: 12px 14px; display: grid; gap: 4px; box-shadow: var(--shadow); }
+.explain .jw { font-family: var(--font-jp); font-size: 19px; font-weight: 600; }
+.explain .jw small { font-size: 14px; color: var(--muted); margin-left: 6px; font-weight: 400; }
+.explain .ja { font-family: var(--font-jp); margin: 0; }
+.explain .ko { margin: 0; color: var(--muted); font-size: 14px; }
+.wrong-list { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+
+/* 단어장 */
+.search { position: sticky; top: 0; z-index: 2; background: var(--bg); padding-block: 4px 10px; display: grid; gap: 10px; }
+.search-box { position: relative; }
+.search-box svg { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; color: var(--muted); }
+.search input {
+  width: 100%; min-height: 48px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--surface);
+  padding: 0 14px 0 42px; font-size: 16px;
+}
+.search input:focus { border-color: var(--ai); outline: none; }
+.chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.chips::-webkit-scrollbar { display: none; }
+.chips button {
+  flex: none; height: 34px; padding: 0 13px; border-radius: 17px; border: 1px solid var(--line); background: var(--surface);
+  font-size: 13.5px; font-weight: 600; color: var(--muted);
+}
+.chips button[aria-pressed="true"] { background: var(--ai); border-color: var(--ai); color: var(--ai-ink); }
+.count { font-size: 13px; color: var(--muted); padding-inline: 2px; }
+.rows { list-style: none; margin: 0; padding: 0; background: var(--surface); border-radius: var(--r); box-shadow: var(--shadow); overflow: hidden; }
+.row { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; padding: 11px 14px; border-bottom: 1px solid var(--line); cursor: pointer; }
+.row:last-child { border-bottom: 0; }
+.row:active { background: var(--surface-2); }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--line); }
+.dot.learning { background: var(--ai); }
+.dot.master { background: var(--ok); }
+.dot.hard { background: var(--ng); }
+.row .jw { font-family: var(--font-jp); font-size: 19px; font-weight: 600; line-height: 1.3; min-width: 0; }
+.row .jw small { display: block; font-family: var(--font-ui); font-size: 12.5px; color: var(--muted); font-weight: 400; letter-spacing: .03em; }
+.row .m { color: var(--muted); font-size: 14px; text-align: right; max-width: 46vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.empty { text-align: center; color: var(--muted); padding: 32px 12px; }
+.more { display: block; margin: 12px auto 0; }
+
+/* 시트(dialog) */
+dialog.sheet {
+  border: 0; padding: 0; margin: auto auto 0; width: 100%; max-width: 560px; max-height: 88dvh;
+  border-radius: 22px 22px 0 0; background: var(--surface); color: var(--ink); box-shadow: 0 -10px 40px rgba(0, 0, 0, .25);
+}
+dialog.sheet::backdrop { background: rgba(10, 12, 25, .45); }
+dialog.sheet[open] { display: flex; flex-direction: column; animation: up .22s ease-out; }
+@keyframes up { from { transform: translateY(24px); opacity: .6; } to { transform: none; opacity: 1; } }
+.sheet-head { display: flex; align-items: center; gap: 8px; padding: 10px 8px 4px 18px; }
+.sheet-head h2 { margin: 0; font-size: 17px; flex: 1; }
+.sheet-body { overflow-y: auto; padding: 4px 18px calc(env(safe-area-inset-bottom, 0px) + 22px); display: grid; gap: 16px; }
+.grab { width: 40px; height: 4px; border-radius: 2px; background: var(--line); margin: 8px auto 0; }
+.d-word { text-align: center; display: grid; gap: 2px; padding: 4px 0 2px; }
+.d-word .word { font-size: clamp(40px, 12vw, 54px); }
+.d-word .row-inline { display: flex; justify-content: center; align-items: center; gap: 6px; }
+.d-meaning { text-align: center; font-size: 20px; font-weight: 700; margin: 0; }
+.section-title { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; color: var(--muted); margin: 0; }
+.section-title svg { width: 18px; height: 18px; color: var(--ai); }
+.ai-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ask { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+.ask input, .input {
+  width: 100%; min-height: 46px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--surface-2); padding: 0 12px; font-size: 16px;
+}
+.ask input:focus, .input:focus, textarea:focus { border-color: var(--ai); outline: none; }
+.ai-out { display: grid; gap: 10px; }
+.ai-out:empty { display: none; }
+.ai-card { background: var(--surface-2); border-radius: 12px; padding: 12px 14px; display: grid; gap: 6px; }
+.ai-card .ja { font-family: var(--font-jp); font-size: 17px; margin: 0; }
+.ai-card .kana { margin: 0; font-size: 13px; color: var(--muted); }
+.ai-card .ko { margin: 0; font-size: 14.5px; color: var(--muted); }
+.ai-card ul { margin: 0; padding-left: 18px; }
+.ai-card p { margin: 0; white-space: pre-wrap; }
+.ai-meta { font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.ai-err { background: var(--ng-soft); color: var(--ng); border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; }
+.ai-err p { margin: 0; }
+.note { font-size: 13.5px; color: var(--muted); margin: 0; }
+.spinner { width: 18px; height: 18px; border-radius: 50%; border: 2.5px solid var(--ai-soft); border-top-color: var(--ai); animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; padding: 6px 2px; }
+textarea { width: 100%; min-height: 110px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--surface-2); padding: 10px 12px; font-size: 13px; font-family: ui-monospace, Menlo, Consolas, monospace; resize: vertical; }
+.set-group { display: grid; gap: 8px; }
+.set-group + .set-group { border-top: 1px solid var(--line); padding-top: 16px; }
+.toggle { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; }
+.toggle input { width: 22px; height: 22px; accent-color: var(--ai); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.danger { color: var(--ng); }
+.confirm { background: var(--ng-soft); border-radius: 12px; padding: 12px; display: grid; gap: 8px; color: var(--ng); }
+
+/* 알림 */
+.toast {
+  position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 78px); transform: translate(-50%, 12px);
+  background: var(--ink); color: var(--bg); padding: 11px 16px; border-radius: 12px; font-size: 14.5px; max-width: calc(100% - 32px);
+  opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 50; text-align: center;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="seal" aria-hidden="true">N2</div>
+    <h1>N2 단어장</h1>
+    <button class="icon-btn" id="btn-settings" aria-label="설정">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+    </button>
+  </header>
+
+  <main id="main">
+    <section class="view" id="view-study" aria-label="학습"></section>
+    <section class="view" id="view-quiz" aria-label="퀴즈" hidden></section>
+    <section class="view" id="view-list" aria-label="단어장" hidden>
+      <div class="search">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="q" type="search" placeholder="단어 · 읽기 · 뜻으로 검색" autocomplete="off" enterkeyhint="search" aria-label="단어 검색">
+        </div>
+        <div class="chips" id="filters" role="group" aria-label="학습 상태로 거르기">
+          <button data-f="all" aria-pressed="true">전체</button>
+          <button data-f="learning" aria-pressed="false">학습 중</button>
+          <button data-f="hard" aria-pressed="false">자주 틀림</button>
+          <button data-f="master" aria-pressed="false">외움</button>
+          <button data-f="none" aria-pressed="false">안 본 단어</button>
+        </div>
+        <div class="count" id="count"></div>
+      </div>
+      <ul class="rows" id="rows"></ul>
+      <button class="btn small more" id="btn-more" hidden>더 보기</button>
+    </section>
+  </main>
+
+  <nav class="tabs" role="tablist" aria-label="화면">
+    <button class="tab" role="tab" data-tab="study" aria-selected="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="6" width="14" height="15" rx="2.5"/><path d="M7 3h11.5A2.5 2.5 0 0 1 21 5.5V17"/></svg>
+      학습<span class="badge" id="badge" hidden></span>
+    </button>
+    <button class="tab" role="tab" data-tab="quiz" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.7 2.7L16.5 9"/></svg>
+      퀴즈
+    </button>
+    <button class="tab" role="tab" data-tab="list" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 21.5V5.5M8.5 8h7M8.5 11.5h5"/></svg>
+      단어장
+    </button>
+  </nav>
+</div>
+
+<!-- 단어 상세 -->
+<dialog class="sheet" id="sheet-detail" aria-labelledby="d-title">
+  <div class="grab" aria-hidden="true"></div>
+  <div class="sheet-head">
+    <h2 id="d-title">단어</h2>
+    <button class="icon-btn" data-close aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>
+  <div class="sheet-body" id="detail-body"></div>
+</dialog>
+
+<!-- 설정 -->
+<dialog class="sheet" id="sheet-settings" aria-labelledby="s-title">
+  <div class="grab" aria-hidden="true"></div>
+  <div class="sheet-head">
+    <h2 id="s-title">설정</h2>
+    <button class="icon-btn" data-close aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>
+  <div class="sheet-body">
+    <div class="set-group">
+      <p class="field-label">하루에 배울 새 단어</p>
+      <div class="seg" id="set-new" role="group" aria-label="하루 새 단어 수">
+        <button data-v="10">10</button><button data-v="20">20</button><button data-v="30">30</button><button data-v="50">50</button>
+      </div>
+      <label class="toggle"><span>카드 앞면에 읽기 함께 보기</span><input type="checkbox" id="set-reading"></label>
+      <p class="field-label">발음 속도</p>
+      <div class="seg" id="set-rate" role="group" aria-label="발음 속도">
+        <button data-v="0.7">천천히</button><button data-v="0.9">보통</button><button data-v="1.1">빠르게</button>
+      </div>
+    </div>
+
+    <div class="set-group">
+      <p class="field-label">Gemini AI (무료)</p>
+      <p class="note">API 키를 넣으면 단어마다 예문 추가, 뉘앙스 설명, 질문하기를 앱 안에서 바로 볼 수 있어요. 키가 없으면 질문을 복사해서 Gemini 앱으로 넘겨 드려요.</p>
+      <p class="note">키 받는 법: <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> 에서 Google 계정으로 로그인 → 「Create API key」 → 복사.</p>
+      <input class="input" id="set-key" type="password" placeholder="AIza로 시작하는 키 붙여넣기" autocomplete="off" spellcheck="false" aria-label="Gemini API 키">
+      <div class="btn-row">
+        <button class="btn small primary" id="btn-key-save">저장</button>
+        <button class="btn small" id="btn-key-test">연결 확인</button>
+        <button class="btn small ghost" id="btn-key-show">키 보기</button>
+        <button class="btn small ghost danger" id="btn-key-del">키 삭제</button>
+      </div>
+      <label class="field-label" for="set-model">모델</label>
+      <select class="input" id="set-model">
+        <option value="auto">자동 (추천 · 안 되면 다음 모델로)</option>
+        <option value="gemini-3.8-flash">gemini-3.8-flash</option>
+        <option value="gemini-3.6-flash">gemini-3.6-flash</option>
+        <option value="gemini-3.5-flash-lite">gemini-3.5-flash-lite</option>
+        <option value="gemini-3.1-flash-lite">gemini-3.1-flash-lite</option>
+        <option value="gemini-2.5-flash">gemini-2.5-flash</option>
+      </select>
+      <p class="note">키는 이 휴대폰 브라우저에만 저장되고, 질문할 때 Google로만 보내져요.</p>
+    </div>
+
+    <div class="set-group">
+      <p class="field-label">진도 백업</p>
+      <p class="note">휴대폰을 바꾸거나 브라우저 데이터를 지우기 전에 진도를 복사해 두세요.</p>
+      <div class="btn-row">
+        <button class="btn small" id="btn-export">진도 복사</button>
+        <button class="btn small" id="btn-import-open">진도 붙여넣기</button>
+      </div>
+      <div id="import-box" class="stack" hidden>
+        <textarea id="io-text" aria-label="진도 데이터" spellcheck="false"></textarea>
+        <div class="btn-row"><button class="btn small primary" id="btn-import">이 내용으로 복원</button></div>
+      </div>
+      <button class="btn small ghost danger" id="btn-reset">진도 초기화</button>
+      <div class="confirm" id="reset-confirm" hidden>
+        <span>학습 기록이 모두 지워져요. 되돌릴 수 없어요.</span>
+        <div class="btn-row"><button class="btn small ng" id="btn-reset-yes">모두 지우기</button><button class="btn small" id="btn-reset-no">취소</button></div>
+      </div>
+    </div>
+
+    <div class="set-group">
+      <p class="field-label">앱으로 설치</p>
+      <button class="btn small primary" id="btn-install" hidden>홈 화면에 설치</button>
+      <p class="note">안드로이드 Chrome: 오른쪽 위 메뉴(⋮) → 「홈 화면에 추가」 또는 「앱 설치」. 아이폰 Safari: 공유 버튼 → 「홈 화면에 추가」.</p>
+      <p class="note" id="about"></p>
+    </div>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+'use strict';
+const VOCAB = [["印象","いんしょう","n","인상","彼の話し方はとても良い印象を与えた。","그의 말투는 아주 좋은 인상을 주었다."],["範囲","はんい","n","범위","試験の範囲は第五章までです。","시험 범위는 5장까지입니다."],["状態","じょうたい","n","상태","機械の状態を毎朝確認しています。","기계 상태를 매일 아침 확인하고 있습니다."],["傾向","けいこう","n","경향","最近の若者は車を買わない傾向がある。","요즘 젊은이들은 차를 사지 않는 경향이 있다."],["原因","げんいん","n","원인","事故の原因はまだ分かっていない。","사고의 원인은 아직 밝혀지지 않았다."],["結果","けっか","n","결과","試験の結果は来週発表される。","시험 결과는 다음 주에 발표된다."],["目的","もくてき","n","목적","今回の旅行の目的は何ですか。","이번 여행의 목적은 무엇입니까?"],["条件","じょうけん","n","조건","この仕事の条件はあまり良くない。","이 일의 조건은 그다지 좋지 않다."],["環境","かんきょう","n","환경","新しい環境に慣れるまで時間がかかった。","새로운 환경에 익숙해질 때까지 시간이 걸렸다."],["機会","きかい","n","기회","海外で働く機会があれば挑戦したい。","해외에서 일할 기회가 있으면 도전하고 싶다."],["価値","かち","n","가치","この絵には大きな価値がある。","이 그림에는 큰 가치가 있다."],["責任","せきにん","n","책임","失敗の責任は私にあります。","실패의 책임은 저에게 있습니다."],["権利","けんり","n","권리","誰にでも意見を言う権利がある。","누구에게나 의견을 말할 권리가 있다."],["義務","ぎむ","n","의무","子どもに教育を受けさせるのは親の義務だ。","아이에게 교육을 받게 하는 것은 부모의 의무다."],["能力","のうりょく","n","능력","彼は問題を解決する能力が高い。","그는 문제를 해결하는 능력이 뛰어나다."],["性格","せいかく","n","성격","妹は明るい性格で友達が多い。","여동생은 밝은 성격이라 친구가 많다."],["習慣","しゅうかん","n","습관","毎朝走るのが私の習慣です。","매일 아침 달리는 것이 제 습관입니다."],["手段","しゅだん","n","수단","目的のためには手段を選ばない人もいる。","목적을 위해서는 수단을 가리지 않는 사람도 있다."],["方法","ほうほう","n","방법","もっと簡単な方法はありませんか。","더 간단한 방법은 없습니까?"],["基本","きほん","n","기본","何事も基本が大切だ。","무슨 일이든 기본이 중요하다."],["基準","きじゅん","n","기준","合格の基準は六十点以上です。","합격 기준은 60점 이상입니다."],["規則","きそく","n","규칙","寮の規則を守ってください。","기숙사 규칙을 지켜 주세요."],["制度","せいど","n","제도","来年から新しい制度が始まる。","내년부터 새로운 제도가 시작된다."],["政治","せいじ","n","정치","若い人も政治に関心を持つべきだ。","젊은 사람도 정치에 관심을 가져야 한다."],["経済","けいざい","n","경제","国の経済が少しずつ回復している。","나라 경제가 조금씩 회복되고 있다."],["産業","さんぎょう","n","산업","この町は観光産業で成り立っている。","이 마을은 관광 산업으로 유지되고 있다."],["資源","しげん","n","자원","限られた資源を大切に使おう。","한정된 자원을 소중히 쓰자."],["地域","ちいき","n","지역","この地域は冬になると雪が多い。","이 지역은 겨울이 되면 눈이 많다."],["都市","とし","n","도시","大都市は家賃が高い。","대도시는 집세가 비싸다."],["郊外","こうがい","n","교외","郊外に家を買って引っ越した。","교외에 집을 사서 이사했다."],["周辺","しゅうへん","n","주변","駅の周辺には店がたくさんある。","역 주변에는 가게가 많이 있다."],["現場","げんば","n","현장","事故の現場に警察が集まった。","사고 현장에 경찰이 모였다."],["現象","げんしょう","n","현상","これは珍しい自然現象だ。","이것은 드문 자연 현상이다."],["現実","げんじつ","n","현실","夢と現実は違う。","꿈과 현실은 다르다."],["事実","じじつ","n","사실","彼の話は事実ではなかった。","그의 이야기는 사실이 아니었다."],["事情","じじょう","n","사정","家庭の事情で会社を辞めた。","집안 사정으로 회사를 그만두었다."],["理由","りゆう","n","이유","遅刻した理由を説明してください。","지각한 이유를 설명해 주세요."],["意識","いしき","n","의식","事故の後、彼はしばらく意識がなかった。","사고 후 그는 한동안 의식이 없었다."],["感覚","かんかく","n","감각","寒さで指の感覚がなくなった。","추위로 손가락 감각이 없어졌다."],["感情","かんじょう","n","감정","彼女はあまり感情を顔に出さない。","그녀는 감정을 별로 얼굴에 드러내지 않는다."],["態度","たいど","n","태도","店員の態度が悪くて腹が立った。","점원의 태도가 나빠서 화가 났다."],["姿勢","しせい","n","자세","姿勢が悪いと腰が痛くなる。","자세가 나쁘면 허리가 아파진다."],["表情","ひょうじょう","n","표정","彼は驚いた表情で私を見た。","그는 놀란 표정으로 나를 보았다."],["印","しるし","n","표시, 표","大事なところに印をつけておいた。","중요한 곳에 표시를 해 두었다."],["記憶","きおく","n","기억","子どもの頃の記憶はほとんどない。","어릴 때의 기억은 거의 없다."],["知識","ちしき","n","지식","専門的な知識が必要な仕事だ。","전문적인 지식이 필요한 일이다."],["情報","じょうほう","n","정보","インターネットで情報を集めた。","인터넷으로 정보를 모았다."],["内容","ないよう","n","내용","会議の内容をメモしておいてください。","회의 내용을 메모해 두세요."],["要素","ようそ","n","요소","健康には睡眠も大切な要素だ。","건강에는 수면도 중요한 요소다."],["成分","せいぶん","n","성분","この薬にはどんな成分が入っていますか。","이 약에는 어떤 성분이 들어 있습니까?"],["材料","ざいりょう","n","재료","カレーの材料を買ってきた。","카레 재료를 사 왔다."],["道具","どうぐ","n","도구","料理の道具をそろえた。","요리 도구를 갖추었다."],["部品","ぶひん","n","부품","古い車の部品はなかなか手に入らない。","오래된 차의 부품은 좀처럼 구할 수 없다."],["製品","せいひん","n","제품","この会社の製品は品質が良い。","이 회사의 제품은 품질이 좋다."],["品質","ひんしつ","n","품질","値段は高いが品質は確かだ。","가격은 비싸지만 품질은 확실하다."],["費用","ひよう","n","비용","引っ越しの費用は会社が出してくれた。","이사 비용은 회사가 내 주었다."],["料金","りょうきん","n","요금","来月から電気料金が上がる。","다음 달부터 전기 요금이 오른다."],["収入","しゅうにゅう","n","수입(번 돈)","転職して収入が増えた。","이직해서 수입이 늘었다."],["支出","ししゅつ","n","지출","今月は支出が多すぎた。","이번 달은 지출이 너무 많았다."],["税金","ぜいきん","n","세금","給料から税金が引かれる。","월급에서 세금이 빠진다."],["残高","ざんだか","n","잔고, 잔액","口座の残高を確認した。","계좌 잔고를 확인했다."],["割合","わりあい","n","비율","女性社員の割合が年々増えている。","여성 사원의 비율이 해마다 늘고 있다."],["平均","へいきん","n","평균","クラスの平均点は七十点だった。","반 평균 점수는 70점이었다."],["合計","ごうけい","n","합계","合計でいくらになりますか。","합계로 얼마가 됩니까?"],["単位","たんい","n","단위, 학점","卒業に必要な単位をすべて取った。","졸업에 필요한 학점을 모두 땄다."],["距離","きょり","n","거리","駅から家までの距離は約二キロだ。","역에서 집까지의 거리는 약 2킬로미터다."],["面積","めんせき","n","면적","この部屋の面積は二十平方メートルだ。","이 방의 면적은 20제곱미터다."],["温度","おんど","n","온도","部屋の温度を少し下げてください。","방 온도를 조금 낮춰 주세요."],["湿度","しつど","n","습도","日本の夏は湿度が高い。","일본의 여름은 습도가 높다."],["気温","きおん","n","기온","今日は気温が三十五度まで上がった。","오늘은 기온이 35도까지 올랐다."],["天候","てんこう","n","날씨, 기상","天候が悪いため、試合は中止になった。","날씨가 나빠서 경기는 중지되었다."],["災害","さいがい","n","재해","災害に備えて水を用意しておく。","재해에 대비해 물을 준비해 둔다."],["被害","ひがい","n","피해","台風で農作物に大きな被害が出た。","태풍으로 농작물에 큰 피해가 났다."],["災難","さいなん","n","재난, 봉변","財布をなくすなんて、とんだ災難だった。","지갑을 잃어버리다니 뜻밖의 봉변이었다."],["症状","しょうじょう","n","증상","風邪の症状が三日も続いている。","감기 증상이 사흘이나 계속되고 있다."],["患者","かんじゃ","n","환자","病院は朝から患者でいっぱいだった。","병원은 아침부터 환자로 가득했다."],["免許","めんきょ","n","면허","大学生のときに運転免許を取った。","대학생 때 운전면허를 땄다."],["資格","しかく","n","자격","介護の資格を取るために勉強している。","간병 자격을 따기 위해 공부하고 있다."],["書類","しょるい","n","서류","必要な書類を来週までに出してください。","필요한 서류를 다음 주까지 내 주세요."],["締め切り","しめきり","n","마감","レポートの締め切りは明日だ。","리포트 마감은 내일이다."],["期限","きげん","n","기한","この牛乳は期限が切れている。","이 우유는 기한이 지났다."],["期間","きかん","n","기간","セールの期間は一週間だ。","세일 기간은 일주일이다."],["時期","じき","n","시기","今は旅行に一番いい時期だ。","지금은 여행하기에 가장 좋은 시기다."],["日程","にってい","n","일정","出張の日程が決まった。","출장 일정이 정해졌다."],["予算","よさん","n","예산","予算が足りないので計画を変えた。","예산이 부족해서 계획을 바꿨다."],["見積もり","みつもり","n","견적","修理の見積もりを出してもらった。","수리 견적을 받았다."],["取引","とりひき","n","거래","あの会社とは長年取引がある。","그 회사와는 오랫동안 거래가 있다."],["商品","しょうひん","n","상품","新しい商品が来月発売される。","새 상품이 다음 달 발매된다."],["在庫","ざいこ","n","재고","その色は在庫がございません。","그 색상은 재고가 없습니다."],["景気","けいき","n","경기(경제 상황)","景気が悪くてボーナスが減った。","경기가 나빠서 보너스가 줄었다."],["物価","ぶっか","n","물가","東京は物価が高い。","도쿄는 물가가 비싸다."],["需要","じゅよう","n","수요","夏はエアコンの需要が増える。","여름에는 에어컨 수요가 늘어난다."],["世代","せだい","n","세대","世代によって考え方が違う。","세대에 따라 사고방식이 다르다."],["人口","じんこう","n","인구","この町の人口は年々減っている。","이 마을의 인구는 해마다 줄고 있다."],["世間","せけん","n","세상, 세간","世間の目を気にしすぎないほうがいい。","세상의 눈을 너무 신경 쓰지 않는 편이 좋다."],["常識","じょうしき","n","상식","約束の時間を守るのは常識だ。","약속 시간을 지키는 것은 상식이다."],["伝統","でんとう","n","전통","この祭りには三百年の伝統がある。","이 축제에는 300년의 전통이 있다."],["行事","ぎょうじ","n","행사","学校の行事で地域の掃除をした。","학교 행사로 동네 청소를 했다."],["宗教","しゅうきょう","n","종교","宗教によって食べられない物がある。","종교에 따라 먹을 수 없는 것이 있다."],["証拠","しょうこ","n","증거","彼が犯人だという証拠はない。","그가 범인이라는 증거는 없다."],["犯人","はんにん","n","범인","犯人はまだ捕まっていない。","범인은 아직 잡히지 않았다."],["事件","じけん","n","사건","昨夜、近所で事件が起きた。","어젯밤 근처에서 사건이 일어났다."],["裁判","さいばん","n","재판","その事件は裁判で争われている。","그 사건은 재판에서 다투어지고 있다."],["法律","ほうりつ","n","법률","法律を守るのは国民の義務だ。","법률을 지키는 것은 국민의 의무다."],["罰","ばつ","n","벌","宿題を忘れた罰として掃除をさせられた。","숙제를 잊은 벌로 청소를 해야 했다."],["礼儀","れいぎ","n","예의","彼は若いのに礼儀正しい。","그는 젊은데도 예의 바르다."],["噂","うわさ","n","소문","二人が結婚するという噂を聞いた。","두 사람이 결혼한다는 소문을 들었다."],["評判","ひょうばん","n","평판","あの店はラーメンがおいしいと評判だ。","그 가게는 라멘이 맛있다고 평판이 나 있다."],["話題","わだい","n","화제","その映画は今、話題になっている。","그 영화는 지금 화제가 되고 있다."],["記事","きじ","n","기사","新聞で面白い記事を読んだ。","신문에서 재미있는 기사를 읽었다."],["番組","ばんぐみ","n","(방송) 프로그램","好きなテレビ番組を録画した。","좋아하는 TV 프로그램을 녹화했다."],["作品","さくひん","n","작품","美術館で有名な画家の作品を見た。","미술관에서 유명한 화가의 작품을 보았다."],["筆者","ひっしゃ","n","필자","筆者が一番言いたいことは何ですか。","필자가 가장 말하고 싶은 것은 무엇입니까?"],["主人公","しゅじんこう","n","주인공","この小説の主人公は高校生だ。","이 소설의 주인공은 고등학생이다."],["場面","ばめん","n","장면","映画の最後の場面で泣いてしまった。","영화의 마지막 장면에서 울어 버렸다."],["舞台","ぶたい","n","무대","彼女は初めて舞台に立った。","그녀는 처음으로 무대에 섰다."],["観客","かんきゃく","n","관객","観客は大きな拍手を送った。","관객은 큰 박수를 보냈다."],["役割","やくわり","n","역할","一人ひとりが自分の役割を果たすことが大切だ。","한 사람 한 사람이 자신의 역할을 다하는 것이 중요하다."],["立場","たちば","n","입장","相手の立場になって考えてみよう。","상대의 입장이 되어 생각해 보자."],["地位","ちい","n","지위","彼は会社で高い地位についている。","그는 회사에서 높은 지위에 있다."],["上司","じょうし","n","상사","上司に報告書を提出した。","상사에게 보고서를 제출했다."],["部下","ぶか","n","부하(직원)","彼は部下に信頼されている。","그는 부하 직원들에게 신뢰받고 있다."],["同僚","どうりょう","n","동료","仕事の後、同僚と飲みに行った。","일이 끝난 후 동료와 술 마시러 갔다."],["職場","しょくば","n","직장","職場の人間関係に悩んでいる。","직장 인간관계로 고민하고 있다."],["手当","てあて","n","수당","残業手当がきちんと出る会社だ。","잔업 수당이 제대로 나오는 회사다."],["休暇","きゅうか","n","휴가","夏に一週間の休暇を取った。","여름에 일주일 휴가를 냈다."],["経歴","けいれき","n","경력, 이력","面接で今までの経歴を聞かれた。","면접에서 지금까지의 경력을 질문받았다."],["長所","ちょうしょ","n","장점","自分の長所と短所を書いてください。","자신의 장점과 단점을 써 주세요."],["短所","たんしょ","n","단점","せっかちなのが私の短所だ。","성급한 것이 내 단점이다."],["欠点","けってん","n","결점","完璧な人などいない。誰にでも欠点はある。","완벽한 사람은 없다. 누구에게나 결점은 있다."],["特徴","とくちょう","n","특징","この車の特徴は燃費の良さだ。","이 차의 특징은 연비가 좋다는 것이다."],["個性","こせい","n","개성","彼女の服装には個性がある。","그녀의 옷차림에는 개성이 있다."],["才能","さいのう","n","재능","彼には音楽の才能がある。","그에게는 음악 재능이 있다."],["実力","じつりょく","n","실력","試合で実力を十分に出せなかった。","경기에서 실력을 충분히 발휘하지 못했다."],["効果","こうか","n","효과","この薬はすぐに効果が出る。","이 약은 바로 효과가 나타난다."],["効率","こうりつ","n","효율","やり方を変えたら仕事の効率が上がった。","방법을 바꿨더니 일의 효율이 올랐다."],["成果","せいか","n","성과","努力の成果が少しずつ出てきた。","노력의 성과가 조금씩 나오기 시작했다."],["目標","もくひょう","n","목표","今年の目標はN2に合格することだ。","올해 목표는 N2에 합격하는 것이다."],["課題","かだい","n","과제","人手不足が大きな課題になっている。","일손 부족이 큰 과제가 되고 있다."],["対策","たいさく","n","대책","暑さ対策として帽子をかぶる。","더위 대책으로 모자를 쓴다."],["手続き","てつづき","n","수속, 절차","市役所で引っ越しの手続きをした。","시청에서 이사 수속을 했다."],["窓口","まどぐち","n","창구","二番の窓口でお待ちください。","2번 창구에서 기다려 주십시오."],["申込書","もうしこみしょ","n","신청서","申込書に名前と住所を書いた。","신청서에 이름과 주소를 썼다."],["領収書","りょうしゅうしょ","n","영수증","領収書をもらうのを忘れた。","영수증 받는 것을 잊었다."],["宛先","あてさき","n","수신처, 받는 곳","メールの宛先を間違えて送ってしまった。","메일 수신처를 잘못 써서 보내 버렸다."],["用途","ようと","n","용도","この箱は用途に合わせて形を変えられる。","이 상자는 용도에 맞춰 모양을 바꿀 수 있다."],["手間","てま","n","수고, 품","手作りの料理は手間がかかる。","손수 만든 요리는 손이 많이 간다."],["余裕","よゆう","n","여유","忙しくて趣味を楽しむ余裕がない。","바빠서 취미를 즐길 여유가 없다."],["限界","げんかい","n","한계","疲れて体力の限界を感じた。","지쳐서 체력의 한계를 느꼈다."],["程度","ていど","n","정도","簡単な会話ならある程度できます。","간단한 회화라면 어느 정도 할 수 있습니다."],["段階","だんかい","n","단계","計画はまだ準備の段階だ。","계획은 아직 준비 단계다."],["順番","じゅんばん","n","순서, 차례","順番に並んでお待ちください。","순서대로 줄을 서서 기다려 주십시오."],["中心","ちゅうしん","n","중심","町の中心に大きな公園がある。","마을 중심에 큰 공원이 있다."],["全体","ぜんたい","n","전체","クラス全体で話し合って決めた。","반 전체가 의논해서 정했다."],["一部","いちぶ","n","일부","工事のため道路の一部が通れない。","공사 때문에 도로 일부를 지나갈 수 없다."],["表面","ひょうめん","n","표면","テーブルの表面に傷がついた。","테이블 표면에 흠집이 났다."],["内側","うちがわ","n","안쪽","白線の内側までお下がりください。","흰 선 안쪽으로 물러나 주십시오."],["隙間","すきま","n","틈","ドアの隙間から冷たい風が入ってくる。","문틈으로 찬 바람이 들어온다."],["角","かど","n","모퉁이","次の角を右に曲がってください。","다음 모퉁이에서 오른쪽으로 돌아 주세요."],["坂","さか","n","비탈길, 언덕","家の前に急な坂がある。","집 앞에 가파른 비탈길이 있다."],["床","ゆか","n","마루, 바닥","床にコーヒーをこぼしてしまった。","바닥에 커피를 쏟고 말았다."],["屋根","やね","n","지붕","雪の重さで屋根が壊れた。","눈의 무게로 지붕이 부서졌다."],["煙","けむり","n","연기","台所から煙が出ている。","부엌에서 연기가 나고 있다."],["灰","はい","n","재","火山の灰が町に降った。","화산재가 마을에 내렸다."],["波","なみ","n","파도","今日は波が高いので泳げない。","오늘은 파도가 높아서 수영할 수 없다."],["泡","あわ","n","거품","ビールの泡がこぼれそうだ。","맥주 거품이 넘칠 것 같다."],["汗","あせ","n","땀","走ったら汗をたくさんかいた。","달렸더니 땀을 많이 흘렸다."],["涙","なみだ","n","눈물","卒業式で涙が止まらなかった。","졸업식에서 눈물이 멈추지 않았다."],["息","いき","n","숨","階段を上がったら息が切れた。","계단을 올라갔더니 숨이 찼다."],["肌","はだ","n","피부","冬は肌が乾燥しやすい。","겨울에는 피부가 건조해지기 쉽다."],["骨","ほね","n","뼈","転んで足の骨を折った。","넘어져서 다리뼈가 부러졌다."],["胸","むね","n","가슴","合格の知らせに胸がいっぱいになった。","합격 소식에 가슴이 벅찼다."],["肩","かた","n","어깨","パソコンを長時間使うと肩がこる。","컴퓨터를 오래 쓰면 어깨가 결린다."],["腰","こし","n","허리","重い荷物を持って腰を痛めた。","무거운 짐을 들다가 허리를 다쳤다."],["爪","つめ","n","손톱, 발톱","爪が伸びたので切った。","손톱이 길어서 잘랐다."],["寿命","じゅみょう","n","수명","日本人の平均寿命は世界でもトップクラスだ。","일본인의 평균 수명은 세계에서도 최상위권이다."],["食欲","しょくよく","n","식욕","熱があって食欲がない。","열이 나서 식욕이 없다."],["栄養","えいよう","n","영양","栄養のバランスを考えて食事をする。","영양 균형을 생각해서 식사를 한다."],["睡眠","すいみん","n","수면","睡眠不足で仕事に集中できない。","수면 부족으로 일에 집중할 수 없다."],["影響","えいきょう","vs","영향(을 주다)","天気が売り上げに影響する。","날씨가 매출에 영향을 준다."],["記録","きろく","vs","기록(하다)","彼は百メートル走で新記録を出した。","그는 100미터 달리기에서 신기록을 세웠다."],["確認","かくにん","vs","확인(하다)","出かける前にガスの火を確認した。","외출하기 전에 가스 불을 확인했다."],["検討","けんとう","vs","검토(하다)","その提案について前向きに検討します。","그 제안에 대해 긍정적으로 검토하겠습니다."],["判断","はんだん","vs","판단(하다)","状況を見て判断してください。","상황을 보고 판단해 주세요."],["決定","けってい","vs","결정(하다)","会議で新しい方針が決定した。","회의에서 새로운 방침이 결정되었다."],["提案","ていあん","vs","제안(하다)","彼の提案はみんなに受け入れられた。","그의 제안은 모두에게 받아들여졌다."],["主張","しゅちょう","vs","주장(하다)","彼は自分の無実を主張した。","그는 자신의 무죄를 주장했다."],["説得","せっとく","vs","설득(하다)","親を説得して留学を許してもらった。","부모님을 설득해서 유학을 허락받았다."],["交渉","こうしょう","vs","교섭, 협상(하다)","給料について会社と交渉した。","월급에 대해 회사와 협상했다."],["契約","けいやく","vs","계약(하다)","新しい部屋の契約をした。","새 방 계약을 했다."],["管理","かんり","vs","관리(하다)","マンションの管理は専門の会社に任せている。","맨션 관리는 전문 회사에 맡기고 있다."],["担当","たんとう","vs","담당(하다)","この件は私が担当しております。","이 건은 제가 담당하고 있습니다."],["対応","たいおう","vs","대응(하다)","お客様の苦情に丁寧に対応した。","고객의 불만에 정중하게 대응했다."],["解決","かいけつ","vs","해결(하다)","話し合いで問題を解決した。","대화로 문제를 해결했다."],["改善","かいぜん","vs","개선(하다)","働き方を改善する必要がある。","일하는 방식을 개선할 필요가 있다."],["向上","こうじょう","vs","향상(되다)","練習を続けて技術が向上した。","연습을 계속해서 기술이 향상되었다."],["発展","はってん","vs","발전(하다)","町は鉄道の開通とともに発展した。","마을은 철도 개통과 함께 발전했다."],["成長","せいちょう","vs","성장(하다)","子どもの成長は本当に早い。","아이의 성장은 정말 빠르다."],["増加","ぞうか","vs","증가(하다)","外国人観光客が増加している。","외국인 관광객이 증가하고 있다."],["減少","げんしょう","vs","감소(하다)","農業をする人が減少している。","농업을 하는 사람이 감소하고 있다."],["拡大","かくだい","vs","확대(하다)","写真を拡大して見た。","사진을 확대해서 보았다."],["縮小","しゅくしょう","vs","축소(하다)","不景気で事業を縮小した。","불경기로 사업을 축소했다."],["変更","へんこう","vs","변경(하다)","会議の時間が三時に変更された。","회의 시간이 3시로 변경되었다."],["調整","ちょうせい","vs","조정(하다)","スケジュールを調整して会う時間を作った。","스케줄을 조정해서 만날 시간을 만들었다."],["延期","えんき","vs","연기(하다), 미룸","雨のため運動会は来週に延期された。","비 때문에 운동회는 다음 주로 연기되었다."],["中止","ちゅうし","vs","중지(하다)","台風でコンサートが中止になった。","태풍으로 콘서트가 중지되었다."],["実施","じっし","vs","실시(하다)","来月、避難訓練を実施します。","다음 달 피난 훈련을 실시합니다."],["実行","じっこう","vs","실행(하다)","計画を立てるだけでなく実行することが大切だ。","계획을 세우는 것뿐만 아니라 실행하는 것이 중요하다."],["協力","きょうりょく","vs","협력(하다)","皆さんのご協力をお願いします。","여러분의 협력을 부탁드립니다."],["支援","しえん","vs","지원(하다)","被災地を支援するために寄付をした。","재해 지역을 지원하기 위해 기부를 했다."],["応援","おうえん","vs","응원(하다)","家族みんなで息子のチームを応援した。","가족 모두가 아들의 팀을 응원했다."],["期待","きたい","vs","기대(하다)","新しい社長に期待している。","새 사장에게 기대하고 있다."],["我慢","がまん","vs","참음, 참다","痛いのを我慢して最後まで走った。","아픈 것을 참고 끝까지 달렸다."],["遠慮","えんりょ","vs","사양, 삼감(하다)","車内での通話はご遠慮ください。","차내에서의 통화는 삼가 주십시오."],["緊張","きんちょう","vs","긴장(하다)","面接でとても緊張した。","면접에서 매우 긴장했다."],["感謝","かんしゃ","vs","감사(하다)","助けてくれた友達に感謝している。","도와준 친구에게 감사하고 있다."],["反省","はんせい","vs","반성(하다)","自分の失敗を深く反省した。","자신의 실수를 깊이 반성했다."],["後悔","こうかい","vs","후회(하다)","もっと勉強すればよかったと後悔している。","더 공부했으면 좋았을 거라고 후회하고 있다."],["理解","りかい","vs","이해(하다)","彼の気持ちがやっと理解できた。","그의 마음을 겨우 이해할 수 있었다."],["納得","なっとく","vs","납득(하다)","その説明ではまだ納得できない。","그 설명으로는 아직 납득할 수 없다."],["想像","そうぞう","vs","상상(하다)","十年後の自分を想像してみた。","10년 후의 나를 상상해 보았다."],["予想","よそう","vs","예상(하다)","試験は予想していたより簡単だった。","시험은 예상했던 것보다 쉬웠다."],["予測","よそく","vs","예측(하다)","地震を正確に予測するのは難しい。","지진을 정확하게 예측하는 것은 어렵다."],["比較","ひかく","vs","비교(하다)","二つの商品の値段を比較した。","두 상품의 가격을 비교했다."],["分析","ぶんせき","vs","분석(하다)","アンケートの結果を分析した。","설문 결과를 분석했다."],["調査","ちょうさ","vs","조사(하다)","事故の原因を調査している。","사고 원인을 조사하고 있다."],["観察","かんさつ","vs","관찰(하다)","夏休みに朝顔の成長を観察した。","여름 방학에 나팔꽃의 성장을 관찰했다."],["確保","かくほ","vs","확보(하다)","早めに行って席を確保しておいた。","일찍 가서 자리를 확보해 두었다."],["保存","ほぞん","vs","보존, 저장(하다)","ファイルを保存するのを忘れた。","파일을 저장하는 것을 잊었다."],["保護","ほご","vs","보호(하다)","森の動物を保護する活動をしている。","숲의 동물을 보호하는 활동을 하고 있다."],["防止","ぼうし","vs","방지(하다)","事故を防止するために信号を増やした。","사고를 방지하기 위해 신호등을 늘렸다."],["注目","ちゅうもく","vs","주목(하다)","新しい技術が世界中から注目されている。","새로운 기술이 전 세계로부터 주목받고 있다."],["指摘","してき","vs","지적(하다)","先生に間違いを指摘された。","선생님께 잘못을 지적받았다."],["指示","しじ","vs","지시(하다)","上司の指示に従って作業した。","상사의 지시에 따라 작업했다."],["命令","めいれい","vs","명령(하다)","社長の命令には逆らえない。","사장의 명령에는 거스를 수 없다."],["許可","きょか","vs","허가(하다)","許可なくここに入ってはいけない。","허가 없이 여기에 들어가면 안 된다."],["禁止","きんし","vs","금지(하다)","ここでの喫煙は禁止されています。","여기서의 흡연은 금지되어 있습니다."],["違反","いはん","vs","위반(하다)","スピード違反で罰金を払った。","속도위반으로 벌금을 냈다."],["申請","しんせい","vs","신청(하다)","ビザの申請に必要な書類をそろえた。","비자 신청에 필요한 서류를 갖추었다."],["提出","ていしゅつ","vs","제출(하다)","来週までにレポートを提出してください。","다음 주까지 리포트를 제출해 주세요."],["応募","おうぼ","vs","응모, 지원(하다)","雑誌のプレゼントに応募した。","잡지 경품에 응모했다."],["募集","ぼしゅう","vs","모집(하다)","駅前の店でアルバイトを募集している。","역 앞 가게에서 아르바이트를 모집하고 있다."],["採用","さいよう","vs","채용(하다)","今年は新入社員を二十人採用した。","올해는 신입 사원을 20명 채용했다."],["退職","たいしょく","vs","퇴직(하다)","父は来年の春に退職する。","아버지는 내년 봄에 퇴직한다."],["勤務","きんむ","vs","근무(하다)","母は市役所に勤務している。","어머니는 시청에 근무하고 있다."],["通勤","つうきん","vs","통근(하다)","毎日電車で一時間かけて通勤している。","매일 전철로 한 시간 걸려 통근하고 있다."],["出張","しゅっちょう","vs","출장(가다)","来週、大阪に出張する。","다음 주 오사카로 출장 간다."],["残業","ざんぎょう","vs","잔업, 야근(하다)","今日も九時まで残業した。","오늘도 9시까지 야근했다."],["貯金","ちょきん","vs","저금(하다)","旅行のために毎月貯金している。","여행을 위해 매달 저금하고 있다."],["節約","せつやく","vs","절약(하다)","電気を節約するためにこまめに消している。","전기를 절약하기 위해 자주 끄고 있다."],["消費","しょうひ","vs","소비(하다)","この冷蔵庫は電力の消費が少ない。","이 냉장고는 전력 소비가 적다."],["生産","せいさん","vs","생산(하다)","この工場では車の部品を生産している。","이 공장에서는 자동차 부품을 생산하고 있다."],["輸出","ゆしゅつ","vs","수출(하다)","日本は多くの車を海外に輸出している。","일본은 많은 자동차를 해외로 수출하고 있다."],["輸入","ゆにゅう","vs","수입(하다)","この果物は南米から輸入されたものだ。","이 과일은 남미에서 수입된 것이다."],["配達","はいたつ","vs","배달(하다)","荷物は明日の午前中に配達されます。","짐은 내일 오전 중에 배달됩니다."],["移動","いどう","vs","이동(하다)","会場まではバスで移動します。","행사장까지는 버스로 이동합니다."],["到着","とうちゃく","vs","도착(하다)","飛行機は予定通り到着した。","비행기는 예정대로 도착했다."],["渋滞","じゅうたい","vs","교통 체증, 정체(되다)","事故で道路が渋滞している。","사고로 도로가 막혀 있다."],["治療","ちりょう","vs","치료(하다)","歯の治療に何度も通った。","이 치료를 받으러 여러 번 다녔다."],["手術","しゅじゅつ","vs","수술(하다)","祖父は先月、目の手術を受けた。","할아버지는 지난달 눈 수술을 받았다."],["回復","かいふく","vs","회복(하다)","母の体調はだいぶ回復した。","어머니의 몸 상태는 꽤 회복되었다."],["診察","しんさつ","vs","진찰(하다)","土曜日の午後は診察を行っていません。","토요일 오후에는 진찰을 하지 않습니다."],["予防","よぼう","vs","예방(하다)","手洗いは風邪の予防になる。","손 씻기는 감기 예방이 된다."],["工夫","くふう","vs","궁리, 고안(하다)","狭い部屋を広く使えるように工夫した。","좁은 방을 넓게 쓸 수 있도록 궁리했다."],["努力","どりょく","vs","노력(하다)","毎日努力すれば必ず上手になる。","매일 노력하면 반드시 잘하게 된다."],["挑戦","ちょうせん","vs","도전(하다)","来年はフルマラソンに挑戦したい。","내년에는 풀코스 마라톤에 도전하고 싶다."],["体験","たいけん","vs","체험(하다)","田舎で農業を体験した。","시골에서 농업을 체험했다."],["発見","はっけん","vs","발견(하다)","古い寺から貴重な資料が発見された。","오래된 절에서 귀중한 자료가 발견되었다."],["発明","はつめい","vs","발명(하다)","電話は誰が発明したか知っていますか。","전화는 누가 발명했는지 알고 있습니까?"],["開発","かいはつ","vs","개발(하다)","新しい薬の開発には長い時間がかかる。","새 약의 개발에는 오랜 시간이 걸린다."],["拍手","はくしゅ","vs","박수(치다)","演奏が終わると観客は拍手した。","연주가 끝나자 관객은 박수를 쳤다."],["握手","あくしゅ","vs","악수(하다)","試合の後、選手たちは握手した。","경기 후 선수들은 악수했다."],["挨拶","あいさつ","vs","인사(하다)","朝、近所の人に挨拶した。","아침에 이웃 사람에게 인사했다."],["議論","ぎろん","vs","논의, 토론(하다)","その問題について遅くまで議論した。","그 문제에 대해 늦게까지 토론했다."],["賛成","さんせい","vs","찬성(하다)","私はその意見に賛成です。","저는 그 의견에 찬성합니다."],["否定","ひてい","vs","부정(하다)","彼はうわさを強く否定した。","그는 소문을 강하게 부정했다."],["承知","しょうち","vs","알고 있음, 승낙(하다)","無理なお願いだとは承知しております。","무리한 부탁이라는 것은 알고 있습니다."],["了解","りょうかい","vs","이해, 양해(하다)","明日の予定、了解しました。","내일 일정, 알겠습니다."],["油断","ゆだん","vs","방심(하다)","油断して最後に逆転された。","방심해서 마지막에 역전당했다."],["区別","くべつ","vs","구별(하다)","双子なので二人を区別するのが難しい。","쌍둥이라서 두 사람을 구별하기가 어렵다."],["整理","せいり","vs","정리(하다)","引き出しの中を整理した。","서랍 안을 정리했다."],["処理","しょり","vs","처리(하다)","たまった仕事を一日で処理した。","쌓인 일을 하루 만에 처리했다."],["交換","こうかん","vs","교환(하다)","電池が切れたので交換した。","건전지가 다 돼서 교환했다."],["両替","りょうがえ","vs","환전(하다)","空港で円をドルに両替した。","공항에서 엔을 달러로 환전했다."],["翻訳","ほんやく","vs","번역(하다)","この小説は二十の言語に翻訳されている。","이 소설은 20개 언어로 번역되어 있다."],["通訳","つうやく","vs","통역(하다)","会議で社長の通訳をした。","회의에서 사장님의 통역을 했다."],["合格","ごうかく","vs","합격(하다)","第一志望の大学に合格した。","제1지망 대학에 합격했다."],["専攻","せんこう","vs","전공(하다)","大学では経済学を専攻した。","대학에서는 경제학을 전공했다."],["暗記","あんき","vs","암기(하다)","毎日単語を二十個暗記している。","매일 단어를 20개 암기하고 있다."],["復習","ふくしゅう","vs","복습(하다)","授業の後で必ず復習している。","수업 후에 반드시 복습하고 있다."],["集中","しゅうちゅう","vs","집중(하다)","静かな場所で勉強に集中した。","조용한 곳에서 공부에 집중했다."],["扱う","あつかう","v","다루다, 취급하다","この店では外国の食品も扱っている。","이 가게에서는 외국 식품도 취급하고 있다."],["改める","あらためる","v","고치다, 바꾸다","悪い習慣を改めることにした。","나쁜 습관을 고치기로 했다."],["争う","あらそう","v","다투다, 겨루다","二つのチームが優勝を争っている。","두 팀이 우승을 다투고 있다."],["表す","あらわす","v","나타내다, 표현하다","言葉で気持ちを表すのは難しい。","말로 마음을 표현하는 것은 어렵다."],["現れる","あらわれる","v","나타나다","約束の時間を過ぎて、やっと彼が現れた。","약속 시간이 지나서야 겨우 그가 나타났다."],["慌てる","あわてる","v","허둥대다, 당황하다","寝坊して慌てて家を出た。","늦잠을 자서 허둥지둥 집을 나섰다."],["傷む","いたむ","v","(음식이) 상하다, 손상되다","暑さで野菜が傷んでしまった。","더위에 채소가 상해 버렸다."],["祈る","いのる","v","빌다, 기원하다","試験の合格を祈っています。","시험 합격을 기원하고 있습니다."],["訴える","うったえる","v","호소하다, 고소하다","彼は腰の痛みを訴えて病院に行った。","그는 허리 통증을 호소하며 병원에 갔다."],["敬う","うやまう","v","공경하다","お年寄りを敬う気持ちを忘れてはいけない。","어르신을 공경하는 마음을 잊어서는 안 된다."],["得る","える","v","얻다","この経験から多くのことを得た。","이 경험에서 많은 것을 얻었다."],["補う","おぎなう","v","보충하다, 메우다","足りない栄養をサプリで補っている。","부족한 영양을 영양제로 보충하고 있다."],["収める","おさめる","v","거두다, 넣다","我がチームは見事に勝利を収めた。","우리 팀은 멋지게 승리를 거두었다."],["納める","おさめる","v","납부하다, 바치다","期限までに税金を納めてください。","기한까지 세금을 납부해 주세요."],["惜しむ","おしむ","v","아끼다, 아쉬워하다","彼は努力を惜しまない人だ。","그는 노력을 아끼지 않는 사람이다."],["劣る","おとる","v","뒤떨어지다","この製品は品質の面で他社に劣らない。","이 제품은 품질 면에서 타사에 뒤지지 않는다."],["衰える","おとろえる","v","쇠약해지다, 약해지다","年をとると体力が衰える。","나이를 먹으면 체력이 약해진다."],["抱える","かかえる","v","안다, 떠안다","彼は多くの問題を抱えている。","그는 많은 문제를 떠안고 있다."],["輝く","かがやく","v","빛나다","夜空に星が輝いている。","밤하늘에 별이 빛나고 있다."],["稼ぐ","かせぐ","v","(돈을) 벌다","学費を稼ぐためにアルバイトをしている。","학비를 벌기 위해 아르바이트를 하고 있다."],["偏る","かたよる","v","치우치다","食事が肉に偏らないように気をつけている。","식사가 고기에 치우치지 않도록 신경 쓰고 있다."],["叶う","かなう","v","(꿈·소원이) 이루어지다","長年の夢がついに叶った。","오랜 꿈이 마침내 이루어졌다."],["絡む","からむ","v","얽히다, 엉키다","イヤホンのコードが絡んでしまった。","이어폰 줄이 엉켜 버렸다."],["乾く","かわく","v","마르다","洗濯物がなかなか乾かない。","빨래가 좀처럼 마르지 않는다."],["効く","きく","v","효과가 있다, (약이) 듣다","この薬は頭痛によく効く。","이 약은 두통에 잘 듣는다."],["刻む","きざむ","v","잘게 썰다, 새기다","玉ねぎを細かく刻んでください。","양파를 잘게 썰어 주세요."],["鍛える","きたえる","v","단련하다","毎朝ジョギングで体を鍛えている。","매일 아침 조깅으로 몸을 단련하고 있다."],["崩れる","くずれる","v","무너지다","大雨で山が崩れた。","큰비로 산이 무너졌다."],["砕ける","くだける","v","부서지다, 깨지다","落としたコップが粉々に砕けた。","떨어뜨린 컵이 산산조각 났다."],["配る","くばる","v","나눠 주다","駅前でチラシを配っている。","역 앞에서 전단지를 나눠 주고 있다."],["悔やむ","くやむ","v","후회하다, 애석해하다","今さら悔やんでも仕方がない。","이제 와서 후회해도 소용없다."],["削る","けずる","v","깎다, 줄이다","予算を削ることになった。","예산을 삭감하게 되었다."],["焦げる","こげる","v","타다, 눋다","話に夢中になって魚が焦げてしまった。","이야기에 정신이 팔려 생선이 타 버렸다."],["凍える","こごえる","v","(추위로) 얼다, 곱다","寒さで手が凍えて字が書けない。","추위로 손이 곱아서 글씨를 쓸 수 없다."],["応える","こたえる","v","부응하다","親の期待に応えたい。","부모님의 기대에 부응하고 싶다."],["断る","ことわる","v","거절하다","忙しかったので誘いを断った。","바빠서 권유를 거절했다."],["好む","このむ","v","좋아하다, 즐기다","父は辛い料理を好んで食べる。","아버지는 매운 요리를 즐겨 드신다."],["転がる","ころがる","v","구르다","ボールが坂を転がっていった。","공이 비탈을 굴러갔다."],["探る","さぐる","v","더듬어 찾다, 살피다","相手の気持ちを探るように質問した。","상대의 마음을 떠보듯이 질문했다."],["支える","ささえる","v","지탱하다, 지지하다","家族に支えられてここまで来られた。","가족의 지지 덕분에 여기까지 올 수 있었다."],["誘う","さそう","v","권하다, 꾀다","友達を映画に誘った。","친구에게 영화를 보자고 했다."],["冷める","さめる","v","식다","スープが冷めないうちに飲んでください。","수프가 식기 전에 드세요."],["覚める","さめる","v","(잠이) 깨다","地震の揺れで目が覚めた。","지진의 흔들림에 잠이 깼다."],["沈む","しずむ","v","가라앉다, (해가) 지다","夕日が海に沈んでいく。","석양이 바다로 지고 있다."],["従う","したがう","v","따르다","係員の指示に従ってください。","담당자의 지시에 따라 주세요."],["縛る","しばる","v","묶다, 얽매다","古新聞をひもで縛って出した。","헌 신문을 끈으로 묶어서 내놓았다."],["絞る","しぼる","v","짜다, 좁히다","レモンを絞ってジュースを作った。","레몬을 짜서 주스를 만들었다."],["占める","しめる","v","차지하다","賛成意見が全体の七割を占めた。","찬성 의견이 전체의 70%를 차지했다."],["救う","すくう","v","구하다","消防士が火事から子どもを救った。","소방관이 화재에서 아이를 구했다."],["優れる","すぐれる","v","뛰어나다","彼女は語学の才能に優れている。","그녀는 어학 재능이 뛰어나다."],["済ませる","すませる","v","끝내다, 때우다","昼ご飯は簡単に済ませた。","점심은 간단히 때웠다."],["迫る","せまる","v","다가오다, 강요하다","締め切りが迫っているので焦っている。","마감이 다가와서 초조하다."],["備える","そなえる","v","대비하다, 갖추다","地震に備えて非常食を用意した。","지진에 대비해 비상식을 준비했다."],["揃える","そろえる","v","갖추다, 맞추다","必要な道具はすべて揃えた。","필요한 도구는 모두 갖췄다."],["耕す","たがやす","v","(논밭을) 갈다","春になって畑を耕した。","봄이 되어 밭을 갈았다."],["蓄える","たくわえる","v","비축하다, 모아 두다","冬に備えて食料を蓄えておく。","겨울에 대비해 식량을 비축해 둔다."],["確かめる","たしかめる","v","확인하다","出かける前に天気予報を確かめた。","외출하기 전에 일기예보를 확인했다."],["戦う","たたかう","v","싸우다","彼は長い間、病気と戦ってきた。","그는 오랫동안 병과 싸워 왔다."],["畳む","たたむ","v","개다, 접다","乾いた洗濯物を畳んだ。","마른 빨래를 갰다."],["頼る","たよる","v","의지하다","いつまでも親に頼ってはいられない。","언제까지나 부모님께 의지할 수는 없다."],["縮む","ちぢむ","v","줄어들다","セーターを洗ったら縮んでしまった。","스웨터를 빨았더니 줄어들어 버렸다."],["散らかる","ちらかる","v","어질러지다","子どもの部屋はいつも散らかっている。","아이 방은 항상 어질러져 있다."],["尽きる","つきる","v","다하다, 떨어지다","二人の話は尽きることがなかった。","두 사람의 이야기는 끝이 없었다."],["努める","つとめる","v","힘쓰다, 노력하다","健康の維持に努めている。","건강 유지에 힘쓰고 있다."],["潰す","つぶす","v","찌그러뜨리다, (시간을) 때우다","駅のカフェで時間を潰した。","역 카페에서 시간을 때웠다."],["詰める","つめる","v","채우다, 좁히다","かばんに荷物を詰めて旅行の準備をした。","가방에 짐을 채워 여행 준비를 했다."],["貫く","つらぬく","v","관철하다, 꿰뚫다","彼は最後まで自分の意見を貫いた。","그는 끝까지 자기 의견을 관철했다."],["整える","ととのえる","v","정돈하다, 갖추다","面接の前に髪を整えた。","면접 전에 머리를 다듬었다."],["唱える","となえる","v","외치다, 주장하다","多くの人がその計画に反対を唱えた。","많은 사람이 그 계획에 반대를 외쳤다."],["飛び出す","とびだす","v","뛰어나가다, 튀어나오다","子どもが急に道路に飛び出してきた。","아이가 갑자기 도로로 뛰어나왔다."],["取り消す","とりけす","v","취소하다","ホテルの予約を取り消した。","호텔 예약을 취소했다."],["眺める","ながめる","v","바라보다","窓から海を眺めていた。","창문으로 바다를 바라보고 있었다."],["慰める","なぐさめる","v","위로하다","試合に負けた友達を慰めた。","경기에 진 친구를 위로했다."],["嘆く","なげく","v","한탄하다","自分の不運を嘆いても仕方がない。","자신의 불운을 한탄해도 소용없다."],["怠ける","なまける","v","게으름 피우다","怠けていたら試験に落ちてしまった。","게으름을 피웠더니 시험에 떨어져 버렸다."],["憎む","にくむ","v","미워하다","罪を憎んで人を憎まず。","죄는 미워하되 사람은 미워하지 말라."],["握る","にぎる","v","쥐다","彼女は緊張して手を強く握った。","그녀는 긴장해서 손을 꽉 쥐었다."],["濁る","にごる","v","탁해지다","大雨の後で川の水が濁っている。","큰비가 내린 후라 강물이 탁하다."],["逃す","のがす","v","놓치다","せっかくのチャンスを逃してしまった。","모처럼의 기회를 놓쳐 버렸다."],["除く","のぞく","v","제외하다, 없애다","日曜日を除いて毎日営業しています。","일요일을 제외하고 매일 영업하고 있습니다."],["望む","のぞむ","v","바라다","多くの国民が平和を望んでいる。","많은 국민이 평화를 바라고 있다."],["述べる","のべる","v","말하다, 진술하다","会議で自分の意見を述べた。","회의에서 자신의 의견을 말했다."],["測る","はかる","v","(길이·양 등을) 재다","毎朝体温を測っている。","매일 아침 체온을 재고 있다."],["励ます","はげます","v","격려하다","落ち込んでいる友達を励ました。","우울해하는 친구를 격려했다."],["外れる","はずれる","v","빗나가다, 벗겨지다","天気予報が外れて雨が降った。","일기예보가 빗나가서 비가 왔다."],["果たす","はたす","v","다하다, 완수하다","約束を果たすことができてほっとした。","약속을 지킬 수 있어서 안심했다."],["省く","はぶく","v","생략하다, 줄이다","時間がないので説明を省きます。","시간이 없어서 설명을 생략하겠습니다."],["流行る","はやる","v","유행하다","今、学校で風邪が流行っている。","지금 학교에서 감기가 유행하고 있다."],["冷える","ひえる","v","차가워지다, 추워지다","夜になると急に冷えてきた。","밤이 되자 갑자기 추워졌다."],["控える","ひかえる","v","삼가다, (일을) 앞두다","医者に言われてお酒を控えている。","의사의 말을 듣고 술을 삼가고 있다."],["響く","ひびく","v","울리다, 울려 퍼지다","ホールにピアノの音が響いた。","홀에 피아노 소리가 울려 퍼졌다."],["広まる","ひろまる","v","퍼지다, 넓어지다","そのうわさはあっという間に広まった。","그 소문은 순식간에 퍼졌다."],["防ぐ","ふせぐ","v","막다, 방지하다","マスクは風邪を防ぐのに役立つ。","마스크는 감기를 막는 데 도움이 된다."],["振り返る","ふりかえる","v","돌아보다","この一年を振り返ってみよう。","올 한 해를 돌아보자."],["震える","ふるえる","v","떨리다","寒くて体が震えた。","추워서 몸이 떨렸다."],["隔てる","へだてる","v","사이를 두다","川を隔てて二つの町がある。","강을 사이에 두고 두 마을이 있다."],["減らす","へらす","v","줄이다","健康のために甘い物を減らした。","건강을 위해 단것을 줄였다."],["吠える","ほえる","v","짖다","隣の犬が夜中に吠えてうるさい。","이웃집 개가 한밤중에 짖어서 시끄럽다."],["誇る","ほこる","v","자랑하다","この町は美しい自然を誇っている。","이 마을은 아름다운 자연을 자랑하고 있다."],["任せる","まかせる","v","맡기다","この仕事は君に任せるよ。","이 일은 너에게 맡길게."],["招く","まねく","v","초대하다, 초래하다","友達を家に招いてパーティーをした。","친구를 집에 초대해서 파티를 했다."],["迷う","まよう","v","헤매다, 망설이다","どちらを買うか迷っている。","어느 쪽을 살지 망설이고 있다."],["見直す","みなおす","v","다시 보다, 재검토하다","提出する前に答えをもう一度見直した。","제출하기 전에 답을 다시 한번 검토했다."],["恵まれる","めぐまれる","v","(좋은 것을) 누리다, 복받다","旅行中は天気に恵まれた。","여행 중에는 날씨 복이 있었다."],["目指す","めざす","v","목표로 하다","彼は医者を目指して勉強している。","그는 의사를 목표로 공부하고 있다."],["設ける","もうける","v","마련하다, 설치하다","駅の前に新しく駐輪場を設けた。","역 앞에 새로 자전거 주차장을 마련했다."],["燃やす","もやす","v","태우다","落ち葉を集めて燃やした。","낙엽을 모아서 태웠다."],["破る","やぶる","v","찢다, (약속을) 어기다","彼は約束を破ったことがない。","그는 약속을 어긴 적이 없다."],["譲る","ゆずる","v","양보하다, 물려주다","電車でお年寄りに席を譲った。","전철에서 어르신께 자리를 양보했다."],["緩む","ゆるむ","v","느슨해지다, 풀리다","靴のひもが緩んでいる。","신발 끈이 느슨해져 있다."],["酔う","よう","v","취하다, 멀미하다","ワインを一杯飲んだだけで酔ってしまった。","와인 한 잔 마셨을 뿐인데 취해 버렸다."],["汚す","よごす","v","더럽히다","新しい服をカレーで汚してしまった。","새 옷을 카레로 더럽혀 버렸다."],["呼びかける","よびかける","v","호소하다, 부르다","市はごみを減らすよう市民に呼びかけている。","시는 쓰레기를 줄이도록 시민에게 호소하고 있다."],["略す","りゃくす","v","줄이다, 생략하다","「パーソナルコンピューター」を略して「パソコン」と言う。","'퍼스널 컴퓨터'를 줄여서 '파소콘(PC)'이라고 한다."],["沸く","わく","v","끓다","お湯が沸いたらお茶を入れましょう。","물이 끓으면 차를 탑시다."],["詫びる","わびる","v","사과하다","遅れたことを丁寧に詫びた。","늦은 것을 정중하게 사과했다."],["割り込む","わりこむ","v","끼어들다","列に割り込むのはやめてください。","줄에 끼어들지 마세요."],["浮かぶ","うかぶ","v","뜨다, 떠오르다","いいアイデアが浮かんだ。","좋은 아이디어가 떠올랐다."],["埋める","うめる","v","묻다, 메우다","犬が庭に骨を埋めた。","개가 마당에 뼈를 묻었다."],["追いつく","おいつく","v","따라잡다","走ってやっと前の人に追いついた。","달려서 겨우 앞사람을 따라잡았다."],["落ち着く","おちつく","v","침착해지다, 안정되다","深呼吸をしたら気持ちが落ち着いた。","심호흡을 했더니 마음이 진정되었다."],["思いつく","おもいつく","v","(생각이) 떠오르다","面白い企画を思いついた。","재미있는 기획이 떠올랐다."],["片付ける","かたづける","v","정리하다, 치우다","遊んだ後はおもちゃを片付けなさい。","논 뒤에는 장난감을 정리해라."],["傾く","かたむく","v","기울다","地震で家が少し傾いた。","지진으로 집이 조금 기울었다."],["組み立てる","くみたてる","v","조립하다","買ってきた本棚を自分で組み立てた。","사 온 책장을 직접 조립했다."],["異なる","ことなる","v","다르다","国によって習慣が異なる。","나라에 따라 습관이 다르다."],["仕上げる","しあげる","v","마무리하다, 완성하다","徹夜でレポートを仕上げた。","밤을 새워 리포트를 완성했다."],["生じる","しょうじる","v","생기다, 발생하다","計画に問題が生じた。","계획에 문제가 생겼다."],["過ごす","すごす","v","지내다, 보내다","週末は家族とゆっくり過ごした。","주말에는 가족과 느긋하게 보냈다."],["背負う","せおう","v","짊어지다, 메다","大きなリュックを背負って山に登った。","큰 배낭을 메고 산에 올랐다."],["繋がる","つながる","v","이어지다, 연결되다","電話がなかなか繋がらない。","전화가 좀처럼 연결되지 않는다."],["届ける","とどける","v","전해 주다, 신고하다","拾った財布を交番に届けた。","주운 지갑을 파출소에 갖다주었다."],["怒鳴る","どなる","v","고함치다","父に大きな声で怒鳴られた。","아버지에게 큰 소리로 혼났다."],["乗り越える","のりこえる","v","극복하다, 넘다","多くの困難を乗り越えて成功した。","많은 어려움을 극복하고 성공했다."],["話しかける","はなしかける","v","말을 걸다","知らない人に駅で話しかけられた。","역에서 모르는 사람이 말을 걸어왔다."],["引き受ける","ひきうける","v","떠맡다, 맡다","難しい仕事を引き受けてしまった。","어려운 일을 맡아 버렸다."],["振る舞う","ふるまう","v","행동하다","彼はいつも大人らしく振る舞う。","그는 항상 어른스럽게 행동한다."],["見かける","みかける","v","(우연히) 보다, 눈에 띄다","駅で偶然、先生を見かけた。","역에서 우연히 선생님을 보았다."],["申し込む","もうしこむ","v","신청하다","料理教室に申し込んだ。","요리 교실에 신청했다."],["役立つ","やくだつ","v","도움이 되다","この本は仕事にとても役立つ。","이 책은 일에 매우 도움이 된다."],["怪しい","あやしい","i","수상하다","家の前に怪しい男が立っている。","집 앞에 수상한 남자가 서 있다."],["荒い","あらい","i","거칠다","今日は波が荒いので船は出ない。","오늘은 파도가 거칠어서 배는 뜨지 않는다."],["勇ましい","いさましい","i","용감하다, 씩씩하다","兵士たちは勇ましく戦った。","병사들은 용감하게 싸웠다."],["著しい","いちじるしい","i","현저하다","彼の日本語は著しく上達した。","그의 일본어는 현저하게 늘었다."],["羨ましい","うらやましい","i","부럽다","毎年海外旅行に行けるなんて羨ましい。","매년 해외여행을 갈 수 있다니 부럽다."],["偉い","えらい","i","훌륭하다, 대견하다","毎日お母さんを手伝うなんて偉いね。","매일 엄마를 돕다니 대견하구나."],["惜しい","おしい","i","아깝다, 아쉽다","あと一点で合格だったのに、惜しかった。","1점만 더 받았으면 합격이었는데 아까웠다."],["恐ろしい","おそろしい","i","무섭다, 두렵다","夜中に恐ろしい夢を見た。","한밤중에 무서운 꿈을 꾸었다."],["大人しい","おとなしい","i","얌전하다, 온순하다","うちの犬はとても大人しい。","우리 집 개는 매우 얌전하다."],["賢い","かしこい","i","영리하다, 현명하다","カラスはとても賢い鳥だ。","까마귀는 아주 영리한 새다."],["固い","かたい","i","단단하다, 굳다","二人は固い握手を交わした。","두 사람은 굳게 악수를 나눴다."],["痒い","かゆい","i","가렵다","蚊に刺されたところが痒い。","모기에 물린 곳이 가렵다."],["辛い","つらい","i","괴롭다, 힘들다","朝早く起きるのは辛い。","아침 일찍 일어나는 것은 힘들다."],["臭い","くさい","i","냄새나다, 구리다","冷蔵庫の中が何だか臭い。","냉장고 안에서 왠지 냄새가 난다."],["詳しい","くわしい","i","자세하다, 정통하다","彼はコンピューターに詳しい。","그는 컴퓨터에 정통하다."],["煙い","けむい","i","(연기가) 맵다","たき火の近くは煙くて目が痛い。","모닥불 근처는 연기가 매워서 눈이 아프다."],["険しい","けわしい","i","험하다, 험악하다","頂上までの道は険しかった。","정상까지의 길은 험했다."],["濃い","こい","i","진하다, 짙다","私は濃いコーヒーが好きだ。","나는 진한 커피를 좋아한다."],["心強い","こころづよい","i","마음 든든하다","先輩が一緒に来てくれて心強かった。","선배가 같이 와 줘서 마음이 든든했다."],["細かい","こまかい","i","잘다, 자세하다, 사소하다","細かいことは気にしなくていい。","사소한 것은 신경 쓰지 않아도 된다."],["騒がしい","さわがしい","i","시끄럽다, 소란스럽다","教室の外が騒がしい。","교실 밖이 소란스럽다."],["親しい","したしい","i","친하다","彼とは子どもの頃から親しい。","그와는 어릴 때부터 친하다."],["渋い","しぶい","i","떫다, 수수하다","このお茶は少し渋い。","이 차는 조금 떫다."],["鋭い","するどい","i","날카롭다, 예리하다","彼女の質問はいつも鋭い。","그녀의 질문은 항상 날카롭다."],["素早い","すばやい","i","재빠르다","猫は素早く逃げていった。","고양이는 재빠르게 도망갔다."],["頼もしい","たのもしい","i","믿음직하다","新人なのに頼もしい仕事ぶりだ。","신입인데도 믿음직한 일솜씨다."],["だらしない","だらしない","i","칠칠치 못하다, 단정치 못하다","服装がだらしないと注意された。","옷차림이 단정치 못하다고 주의를 받았다."],["乏しい","とぼしい","i","부족하다, 모자라다","彼はまだ経験が乏しい。","그는 아직 경험이 부족하다."],["情けない","なさけない","i","한심하다","こんな簡単な問題を間違えるなんて情けない。","이런 쉬운 문제를 틀리다니 한심하다."],["懐かしい","なつかしい","i","그립다","この歌を聞くと学生時代が懐かしい。","이 노래를 들으면 학창 시절이 그립다."],["鈍い","にぶい","i","둔하다","彼は人の気持ちに鈍いところがある。","그는 남의 마음에 둔한 데가 있다."],["激しい","はげしい","i","격렬하다, 심하다","夜中に激しい雨が降った。","한밤중에 세찬 비가 내렸다."],["甚だしい","はなはだしい","i","심하다, 대단하다","それは甚だしい誤解だ。","그것은 심한 오해다."],["等しい","ひとしい","i","같다, 동등하다","二つの辺の長さは等しい。","두 변의 길이는 같다."],["相応しい","ふさわしい","i","어울리다, 걸맞다","彼こそリーダーに相応しい人だ。","그야말로 리더에 걸맞은 사람이다."],["貧しい","まずしい","i","가난하다","彼は貧しい家に生まれた。","그는 가난한 집에서 태어났다."],["眩しい","まぶしい","i","눈부시다","朝日が眩しくて目を細めた。","아침 햇살이 눈부셔서 눈을 가늘게 떴다."],["醜い","みにくい","i","추하다, 보기 흉하다","遺産をめぐって醜い争いが起きた。","유산을 둘러싸고 추한 다툼이 일어났다."],["蒸し暑い","むしあつい","i","무덥다","今日は朝から蒸し暑い。","오늘은 아침부터 무덥다."],["空しい","むなしい","i","허무하다, 헛되다","努力が報われず空しい気持ちになった。","노력이 보답받지 못해 허무한 기분이 들었다."],["面倒くさい","めんどうくさい","i","귀찮다","毎日料理をするのは面倒くさい。","매일 요리하는 것은 귀찮다."],["申し訳ない","もうしわけない","i","죄송하다, 미안하다","何度も手伝ってもらって申し訳ない。","몇 번이나 도움을 받아서 미안하다."],["もったいない","もったいない","i","아깝다","まだ使えるのに捨てるのはもったいない。","아직 쓸 수 있는데 버리는 것은 아깝다."],["緩い","ゆるい","i","느슨하다, 헐렁하다","このズボンは少し緩い。","이 바지는 조금 헐렁하다."],["幼い","おさない","i","어리다","幼い頃、よくこの公園で遊んだ。","어렸을 때 자주 이 공원에서 놀았다."],["若々しい","わかわかしい","i","젊디젊다, 젊어 보이다","祖母は七十歳とは思えないほど若々しい。","할머니는 일흔 살로 보이지 않을 만큼 젊어 보인다."],["図々しい","ずうずうしい","i","뻔뻔하다","何度もお金を借りに来るなんて図々しい。","몇 번이나 돈을 빌리러 오다니 뻔뻔하다."],["慌ただしい","あわただしい","i","분주하다","年末は何かと慌ただしい。","연말은 이래저래 분주하다."],["好ましい","このましい","i","바람직하다","夜遅くまでゲームをするのは好ましくない。","밤늦게까지 게임을 하는 것은 바람직하지 않다."],["薄い","うすい","i","얇다, 연하다, 싱겁다","このスープは味が薄い。","이 수프는 맛이 싱겁다."],["浅い","あさい","i","얕다","この川は浅いので子どもでも安全だ。","이 강은 얕아서 아이라도 안전하다."],["快い","こころよい","i","상쾌하다, 흔쾌하다","彼は私の頼みを快く引き受けてくれた。","그는 내 부탁을 흔쾌히 들어주었다."],["曖昧","あいまい","na","애매함","彼の返事はいつも曖昧だ。","그의 대답은 항상 애매하다."],["鮮やか","あざやか","na","선명함, 산뜻함","秋になると山が鮮やかな赤に染まる。","가을이 되면 산이 선명한 빨강으로 물든다."],["新た","あらた","na","새로움","新たな気持ちで仕事を始めた。","새로운 마음으로 일을 시작했다."],["意外","いがい","na","의외","試験は意外に簡単だった。","시험은 의외로 쉬웠다."],["違法","いほう","na","위법, 불법","違法な駐車は罰金の対象になる。","불법 주차는 벌금 대상이 된다."],["穏やか","おだやか","na","온화함, 잔잔함","今日は海が穏やかだ。","오늘은 바다가 잔잔하다."],["大げさ","おおげさ","na","과장됨","彼はいつも話が大げさだ。","그는 항상 이야기를 과장한다."],["臆病","おくびょう","na","겁이 많음","うちの猫は臆病で、客が来ると隠れる。","우리 고양이는 겁이 많아서 손님이 오면 숨는다."],["確実","かくじつ","na","확실함","この方法なら確実に成功する。","이 방법이라면 확실히 성공한다."],["過剰","かじょう","na","과잉","過剰な包装はごみを増やす。","과잉 포장은 쓰레기를 늘린다."],["微か","かすか","na","희미함","遠くから微かに音楽が聞こえる。","멀리서 희미하게 음악이 들린다."],["活発","かっぱつ","na","활발함","彼女は活発な子どもだった。","그녀는 활발한 아이였다."],["頑丈","がんじょう","na","튼튼함","この机は頑丈で長く使える。","이 책상은 튼튼해서 오래 쓸 수 있다."],["気軽","きがる","na","부담 없음, 가벼움","何かあれば気軽に声をかけてください。","무슨 일이 있으면 부담 없이 말을 걸어 주세요."],["貴重","きちょう","na","귀중함","貴重なご意見をありがとうございます。","귀중한 의견 감사합니다."],["几帳面","きちょうめん","na","꼼꼼함","父は几帳面で、毎日日記をつけている。","아버지는 꼼꼼해서 매일 일기를 쓰고 있다."],["気の毒","きのどく","na","딱함, 안됨","事故に遭った人たちは本当に気の毒だ。","사고를 당한 사람들은 정말 안됐다."],["急激","きゅうげき","na","급격함","気温が急激に下がった。","기온이 급격하게 내려갔다."],["器用","きよう","na","손재주가 좋음, 요령이 좋음","弟は手先が器用で何でも作れる。","남동생은 손재주가 좋아서 뭐든지 만들 수 있다."],["強力","きょうりょく","na","강력함","この掃除機は吸う力が強力だ。","이 청소기는 흡입력이 강력하다."],["清潔","せいけつ","na","청결함","台所はいつも清潔にしておきたい。","부엌은 항상 청결하게 해 두고 싶다."],["謙虚","けんきょ","na","겸허함","彼は成功しても謙虚な態度を忘れない。","그는 성공해도 겸허한 태도를 잊지 않는다."],["厳重","げんじゅう","na","엄중함","会場の警備は厳重だった。","회장 경비는 엄중했다."],["健全","けんぜん","na","건전함","健全な体に健全な心が宿る。","건전한 몸에 건전한 정신이 깃든다."],["豪華","ごうか","na","호화로움","結婚式で豪華な料理が出た。","결혼식에서 호화로운 요리가 나왔다."],["盛ん","さかん","na","왕성함, 활발함","この町は昔から漁業が盛んだ。","이 마을은 옛날부터 어업이 활발하다."],["爽やか","さわやか","na","상쾌함","朝の爽やかな空気が気持ちいい。","아침의 상쾌한 공기가 기분 좋다."],["地味","じみ","na","수수함","彼女はいつも地味な色の服を着ている。","그녀는 항상 수수한 색의 옷을 입고 있다."],["派手","はで","na","화려함","そのシャツは私には派手すぎる。","그 셔츠는 나에게는 너무 화려하다."],["重大","じゅうだい","na","중대함","これは会社にとって重大な問題だ。","이것은 회사에 있어 중대한 문제다."],["柔軟","じゅうなん","na","유연함","状況に応じて柔軟に対応してください。","상황에 따라 유연하게 대응해 주세요."],["純粋","じゅんすい","na","순수함","子どもの純粋な心を大切にしたい。","아이의 순수한 마음을 소중히 하고 싶다."],["慎重","しんちょう","na","신중함","大事なことは慎重に決めるべきだ。","중요한 일은 신중하게 결정해야 한다."],["深刻","しんこく","na","심각함","水不足が深刻になっている。","물 부족이 심각해지고 있다."],["真剣","しんけん","na","진지함","彼は真剣な顔で話を聞いていた。","그는 진지한 얼굴로 이야기를 듣고 있었다."],["素直","すなお","na","솔직함, 순순함","彼は自分の間違いを素直に認めた。","그는 자신의 잘못을 순순히 인정했다."],["正確","せいかく","na","정확함","時間を正確に計ってください。","시간을 정확하게 재 주세요."],["積極的","せっきょくてき","na","적극적","授業では積極的に発言しましょう。","수업에서는 적극적으로 발언합시다."],["消極的","しょうきょくてき","na","소극적","彼は新しいことに消極的だ。","그는 새로운 일에 소극적이다."],["相当","そうとう","na","상당함","引っ越しには相当なお金がかかった。","이사에는 상당한 돈이 들었다."],["素朴","そぼく","na","소박함","田舎の素朴な料理が好きだ。","시골의 소박한 요리를 좋아한다."],["退屈","たいくつ","na","지루함, 따분함","授業が退屈で眠くなった。","수업이 지루해서 졸렸다."],["単純","たんじゅん","na","단순함","問題は思ったより単純だった。","문제는 생각보다 단순했다."],["手軽","てがる","na","손쉬움, 간편함","手軽に作れる料理を教えてください。","간편하게 만들 수 있는 요리를 가르쳐 주세요."],["適切","てきせつ","na","적절함","状況に合わせて適切な言葉を選ぶ。","상황에 맞춰 적절한 말을 고른다."],["適当","てきとう","na","적당함, 대충함","適当に答えを書いたら全部間違っていた。","대충 답을 썼더니 전부 틀렸다."],["独特","どくとく","na","독특함","この料理には独特な香りがある。","이 요리에는 독특한 향이 있다."],["生意気","なまいき","na","건방짐","弟は最近生意気なことばかり言う。","남동생은 요즘 건방진 소리만 한다."],["苦手","にがて","na","서투름, 질색","人前で話すのが苦手だ。","사람들 앞에서 말하는 것이 서툴다."],["呑気","のんき","na","태평함","試験前なのに弟は呑気に遊んでいる。","시험 전인데도 남동생은 태평하게 놀고 있다."],["莫大","ばくだい","na","막대함","その研究には莫大な費用がかかる。","그 연구에는 막대한 비용이 든다."],["必死","ひっし","na","필사적","電車に乗り遅れないように必死に走った。","전철을 놓치지 않으려고 필사적으로 달렸다."],["敏感","びんかん","na","민감함","彼女は音に敏感だ。","그녀는 소리에 민감하다."],["不安定","ふあんてい","na","불안정함","最近、天気が不安定だ。","요즘 날씨가 불안정하다."],["不規則","ふきそく","na","불규칙함","不規則な生活は体に悪い。","불규칙한 생활은 몸에 나쁘다."],["物騒","ぶっそう","na","뒤숭숭함, 위험함","最近この辺りは物騒だから夜は気をつけて。","요즘 이 근처는 뒤숭숭하니까 밤에는 조심해."],["平凡","へいぼん","na","평범함","平凡でも幸せな毎日を送りたい。","평범해도 행복한 나날을 보내고 싶다."],["豊富","ほうふ","na","풍부함","この店は品物が豊富だ。","이 가게는 물건이 풍부하다."],["朗らか","ほがらか","na","명랑함","彼女は朗らかな性格でみんなに好かれている。","그녀는 명랑한 성격이라 모두에게 사랑받고 있다."],["惨め","みじめ","na","비참함","雨にぬれて惨めな気分になった。","비에 젖어서 비참한 기분이 들었다."],["無駄","むだ","na","쓸데없음, 낭비","時間を無駄にしないようにしよう。","시간을 낭비하지 않도록 하자."],["無茶","むちゃ","na","터무니없음, 무리","一日で全部終わらせるなんて無茶だ。","하루 만에 전부 끝내다니 무리다."],["明確","めいかく","na","명확함","目標を明確にすることが大切だ。","목표를 명확히 하는 것이 중요하다."],["面倒","めんどう","na","번거로움, 귀찮음","手続きが面倒で、まだやっていない。","수속이 번거로워서 아직 하지 않았다."],["愉快","ゆかい","na","유쾌함","彼は愉快な人で、一緒にいると楽しい。","그는 유쾌한 사람이라 함께 있으면 즐겁다."],["容易","ようい","na","용이함, 쉬움","この問題を解くのは容易ではない。","이 문제를 푸는 것은 쉽지 않다."],["冷静","れいせい","na","냉정함, 침착함","何が起きても冷静に行動しよう。","무슨 일이 일어나도 침착하게 행동하자."],["安易","あんい","na","안이함","安易に借金をしてはいけない。","안이하게 빚을 져서는 안 된다."],["あいにく","あいにく","adv","공교롭게도","あいにく、その日は予定が入っています。","공교롭게도 그날은 일정이 있습니다."],["あえて","あえて","adv","굳이, 일부러","反対されると分かっていたが、あえて意見を言った。","반대당할 줄 알았지만 굳이 의견을 말했다."],["あらかじめ","あらかじめ","adv","미리","欠席する場合は、あらかじめ連絡してください。","결석할 경우에는 미리 연락해 주세요."],["改めて","あらためて","adv","다시, 새삼","後日改めてご連絡いたします。","후일 다시 연락드리겠습니다."],["いきなり","いきなり","adv","갑자기","いきなり後ろから肩をたたかれて驚いた。","갑자기 뒤에서 누가 어깨를 두드려서 놀랐다."],["一応","いちおう","adv","일단, 우선","一応、傘を持っていこう。","일단 우산을 가져가자."],["一層","いっそう","adv","한층, 더욱","雨が一層激しくなった。","비가 한층 거세졌다."],["一斉に","いっせいに","adv","일제히","合図と同時に一斉に走り出した。","신호와 동시에 일제히 달리기 시작했다."],["未だに","いまだに","adv","아직도","未だにその時のことを覚えている。","아직도 그때의 일을 기억하고 있다."],["うっかり","うっかり","adv","깜빡, 무심코","うっかり財布を家に忘れてきた。","깜빡하고 지갑을 집에 두고 왔다."],["おそらく","おそらく","adv","아마, 필시","おそらく明日は雨だろう。","아마 내일은 비가 올 것이다."],["思い切り","おもいきり","adv","마음껏","休みの日は思い切り遊びたい。","쉬는 날에는 마음껏 놀고 싶다."],["かえって","かえって","adv","오히려, 도리어","薬を飲んだら、かえって具合が悪くなった。","약을 먹었더니 오히려 몸 상태가 나빠졌다."],["必ずしも","かならずしも","adv","반드시 (~인 것은 아니다)","高い物が必ずしも良いとは限らない。","비싼 것이 반드시 좋다고는 할 수 없다."],["きっぱり","きっぱり","adv","딱 잘라","彼の誘いをきっぱり断った。","그의 권유를 딱 잘라 거절했다."],["ぎりぎり","ぎりぎり","adv","아슬아슬하게","締め切りぎりぎりにレポートを出した。","마감에 아슬아슬하게 리포트를 냈다."],["ぐっすり","ぐっすり","adv","푹 (깊이 잠든 모양)","疲れていたので朝までぐっすり眠った。","피곤해서 아침까지 푹 잤다."],["くれぐれも","くれぐれも","adv","부디, 아무쪼록","くれぐれもお体に気をつけてください。","부디 몸조심하세요."],["決して","けっして","adv","결코","このことは決して誰にも言わないでください。","이 일은 결코 누구에게도 말하지 마세요."],["結局","けっきょく","adv","결국","いろいろ迷ったが、結局何も買わなかった。","이것저것 망설였지만 결국 아무것도 사지 않았다."],["さすが","さすが","adv","과연, 역시","一度で合格するなんて、さすがだね。","한 번에 합격하다니 역시 대단하네."],["さっそく","さっそく","adv","즉시, 바로","新しいゲームを買ったので、さっそく遊んでみた。","새 게임을 사서 바로 해 보았다."],["さっぱり","さっぱり","adv","전혀 (+부정), 산뜻하게","彼の説明はさっぱり分からなかった。","그의 설명은 전혀 이해가 안 됐다."],["次第に","しだいに","adv","점차","次第に空が明るくなってきた。","점차 하늘이 밝아지기 시작했다."],["しっかり","しっかり","adv","단단히, 제대로","出かける前にしっかり鍵をかけた。","외출하기 전에 문을 단단히 잠갔다."],["実は","じつは","adv","실은","実は、来月会社を辞めるんです。","실은 다음 달에 회사를 그만둡니다."],["しばらく","しばらく","adv","잠시, 한동안","しばらく休んだら元気になった。","잠시 쉬었더니 기운이 났다."],["少しも","すこしも","adv","조금도 (+부정)","彼の話は少しも面白くなかった。","그의 이야기는 조금도 재미있지 않았다."],["すっかり","すっかり","adv","완전히","雪はすっかり溶けてしまった。","눈은 완전히 녹아 버렸다."],["既に","すでに","adv","이미","駅に着いたとき、電車は既に出ていた。","역에 도착했을 때 전철은 이미 떠나 있었다."],["せっかく","せっかく","adv","모처럼, 애써","せっかく作ったのに、誰も食べてくれなかった。","애써 만들었는데 아무도 먹어 주지 않았다."],["相変わらず","あいかわらず","adv","여전히","彼は相変わらず忙しそうだ。","그는 여전히 바빠 보인다."],["そっと","そっと","adv","살짝, 가만히","赤ちゃんが寝ているので、そっとドアを閉めた。","아기가 자고 있어서 살짝 문을 닫았다."],["たちまち","たちまち","adv","금세, 순식간에","新商品はたちまち売り切れた。","신상품은 금세 매진되었다."],["直ちに","ただちに","adv","즉시","地震が起きたら直ちに火を消してください。","지진이 일어나면 즉시 불을 꺼 주세요."],["たまたま","たまたま","adv","우연히","たまたま入った店がとてもおいしかった。","우연히 들어간 가게가 아주 맛있었다."],["単に","たんに","adv","단지","それは単に時間の問題だ。","그것은 단지 시간 문제다."],["ちゃんと","ちゃんと","adv","제대로, 착실히","毎日ちゃんと朝ご飯を食べている。","매일 제대로 아침밥을 먹고 있다."],["ついに","ついに","adv","마침내, 드디어","十年かけて、ついに家を建てた。","10년 걸려서 마침내 집을 지었다."],["つい","つい","adv","그만, 무심코","ダイエット中なのに、ついケーキを食べてしまった。","다이어트 중인데 그만 케이크를 먹어 버렸다."],["常に","つねに","adv","항상","常に安全を第一に考えています。","항상 안전을 최우선으로 생각하고 있습니다."],["てっきり","てっきり","adv","틀림없이 (~인 줄 알았다)","てっきり休みだと思っていた。","당연히 쉬는 날인 줄 알았다."],["到底","とうてい","adv","도저히 (+부정)","この量を一日で終わらせるのは到底無理だ。","이 양을 하루 만에 끝내는 것은 도저히 무리다."],["とっくに","とっくに","adv","훨씬 전에, 벌써","宿題ならとっくに終わったよ。","숙제라면 벌써 끝났어."],["とにかく","とにかく","adv","어쨌든","とにかく一度やってみよう。","어쨌든 한번 해 보자."],["共に","ともに","adv","함께","家族と共に新年を迎えた。","가족과 함께 새해를 맞이했다."],["何となく","なんとなく","adv","왠지, 어쩐지","今日は何となく元気が出ない。","오늘은 왠지 기운이 나지 않는다."],["何とか","なんとか","adv","그럭저럭, 어떻게든","何とか時間に間に合った。","그럭저럭 시간에 맞췄다."],["のんびり","のんびり","adv","느긋하게","休日は家でのんびり過ごした。","휴일은 집에서 느긋하게 보냈다."],["はっきり","はっきり","adv","분명히, 확실히","自分の意見をはっきり言ったほうがいい。","자기 의견을 분명히 말하는 편이 좋다."],["果たして","はたして","adv","과연","果たして彼は約束の時間に来るだろうか。","과연 그는 약속 시간에 올까?"],["ぴったり","ぴったり","adv","꼭 (맞는 모양)","この靴は私の足にぴったりだ。","이 신발은 내 발에 꼭 맞는다."],["ひとまず","ひとまず","adv","일단, 우선","ひとまず休憩しましょう。","일단 쉽시다."],["ふと","ふと","adv","문득","ふと空を見上げると、虹が出ていた。","문득 하늘을 올려다보니 무지개가 떠 있었다."],["再び","ふたたび","adv","다시, 재차","彼は五年ぶりに再び日本を訪れた。","그는 5년 만에 다시 일본을 방문했다."],["ぶらぶら","ぶらぶら","adv","어슬렁어슬렁","休みの日に町をぶらぶらした。","쉬는 날에 시내를 어슬렁거렸다."],["ほぼ","ほぼ","adv","거의","工事はほぼ終わった。","공사는 거의 끝났다."],["まさか","まさか","adv","설마","まさか彼が犯人だとは思わなかった。","설마 그가 범인일 줄은 몰랐다."],["まして","まして","adv","하물며","大人でも難しいのに、まして子どもには無理だ。","어른도 어려운데 하물며 아이에게는 무리다."],["間もなく","まもなく","adv","곧, 머지않아","間もなく電車がまいります。","곧 전철이 들어옵니다."],["まるで","まるで","adv","마치","彼女はまるで本物の歌手のように歌う。","그녀는 마치 진짜 가수처럼 노래한다."],["自ら","みずから","adv","스스로, 직접","社長自ら客を迎えに出た。","사장이 직접 손님을 맞으러 나갔다."],["むしろ","むしろ","adv","오히려, 차라리","休むより、むしろ働いているほうが楽だ。","쉬는 것보다 오히려 일하는 편이 편하다."],["めったに","めったに","adv","좀처럼 (+부정)","父はめったに怒らない。","아버지는 좀처럼 화내지 않는다."],["もしかすると","もしかすると","adv","어쩌면","もしかすると、彼は来ないかもしれない。","어쩌면 그는 오지 않을지도 모른다."],["最も","もっとも","adv","가장","富士山は日本で最も高い山だ。","후지산은 일본에서 가장 높은 산이다."],["やっと","やっと","adv","겨우, 간신히","三時間待って、やっと順番が来た。","세 시간 기다려서 겨우 차례가 왔다."],["やや","やや","adv","약간, 다소","今日はやや風が強い。","오늘은 약간 바람이 세다."],["要するに","ようするに","adv","요컨대","要するに、お金が足りないということだ。","요컨대 돈이 부족하다는 것이다."],["ようやく","ようやく","adv","겨우, 마침내","長い冬が終わり、ようやく春が来た。","긴 겨울이 끝나고 마침내 봄이 왔다."],["わざと","わざと","adv","일부러 (고의로)","彼はわざと負けたのではないか。","그는 일부러 진 것이 아닐까?"],["わざわざ","わざわざ","adv","일부러, 굳이 (수고스럽게)","雨の中、わざわざ来てくれてありがとう。","빗속에 일부러 와 줘서 고마워."],["いよいよ","いよいよ","adv","드디어, 마침내","いよいよ明日から夏休みだ。","드디어 내일부터 여름 방학이다."],["うろうろ","うろうろ","adv","서성서성","道が分からず駅の前をうろうろした。","길을 몰라 역 앞을 서성거렸다."],["がっかり","がっかり","adv","실망하는 모양","試合に負けてがっかりした。","경기에 져서 실망했다."],["ずらりと","ずらりと","adv","죽 (늘어선 모양)","店の前に客がずらりと並んでいる。","가게 앞에 손님이 죽 늘어서 있다."],["いったん","いったん","adv","일단, 한번","いったん家に帰ってから出かけます。","일단 집에 돌아갔다가 나가겠습니다."],["わずか","わずか","adv","불과, 겨우","わずか三日で仕事を終わらせた。","불과 사흘 만에 일을 끝냈다."],["しかも","しかも","etc","게다가","この店は安くて、しかもおいしい。","이 가게는 싸고 게다가 맛있다."],["それとも","それとも","etc","아니면","コーヒーにしますか、それとも紅茶にしますか。","커피로 하시겠습니까, 아니면 홍차로 하시겠습니까?"],["ところが","ところが","etc","그런데, 그러나","晴れると思っていた。ところが、午後から雨が降り出した。","맑을 거라고 생각했다. 그런데 오후부터 비가 내리기 시작했다."],["したがって","したがって","etc","따라서","本日は祝日です。したがって、窓口は休みです。","오늘은 공휴일입니다. 따라서 창구는 쉽니다."],["すなわち","すなわち","etc","즉","彼は母の兄、すなわち私の伯父だ。","그는 어머니의 오빠, 즉 나의 외삼촌이다."],["なお","なお","etc","덧붙여, 또한","説明会は三時からです。なお、駐車場はありません。","설명회는 3시부터입니다. 덧붙여 주차장은 없습니다."],["ただし","ただし","etc","단, 다만","入場は無料です。ただし、予約が必要です。","입장은 무료입니다. 단, 예약이 필요합니다."],["もっとも","もっとも","etc","하긴, 다만","彼の意見は正しい。もっとも、実行するのは難しいが。","그의 의견은 옳다. 하긴 실행하기는 어렵지만."],["そのうえ","そのうえ","etc","게다가, 더구나","道に迷い、そのうえ雨まで降ってきた。","길을 잃었고 게다가 비까지 내리기 시작했다."],["それなのに","それなのに","etc","그런데도","一生懸命勉強した。それなのに、試験に落ちた。","열심히 공부했다. 그런데도 시험에 떨어졌다."],["にもかかわらず","にもかかわらず","etc","그럼에도 불구하고","雨にもかかわらず、大勢の人が集まった。","비가 오는데도 많은 사람이 모였다."],["つまり","つまり","etc","즉, 요컨대","つまり、あなたは反対だということですね。","즉, 당신은 반대라는 말씀이군요."],["あるいは","あるいは","etc","혹은","電話、あるいはメールでご連絡ください。","전화 혹은 메일로 연락해 주세요."],["または","または","etc","또는","黒または青のペンで書いてください。","검정 또는 파랑 펜으로 써 주세요."],["例えば","たとえば","etc","예를 들면","果物、例えばりんごやみかんが好きです。","과일, 예를 들면 사과나 귤을 좋아합니다."],["いわゆる","いわゆる","etc","이른바","彼はいわゆる天才だ。","그는 이른바 천재다."],["あらゆる","あらゆる","etc","모든, 온갖","あらゆる方法を試してみた。","모든 방법을 시도해 보았다."],["単なる","たんなる","etc","단순한, 그저 ~일 뿐인","それは単なるうわさにすぎない。","그것은 단순한 소문에 불과하다."],["いかなる","いかなる","etc","어떠한","いかなる理由があっても、暴力は許されない。","어떠한 이유가 있어도 폭력은 용서받을 수 없다."],["主な","おもな","etc","주된, 주요한","この国の主な産業は農業だ。","이 나라의 주된 산업은 농업이다."],["大した","たいした","etc","대단한, 별 (+부정)","大したけがではないので心配いりません。","큰 부상은 아니니 걱정하지 않아도 됩니다."],["ちなみに","ちなみに","etc","참고로, 덧붙여 말하면","ちなみに、私の誕生日も五月です。","참고로 제 생일도 5월입니다."],["さて","さて","etc","그런데, 자","さて、次の議題に移りましょう。","자, 다음 안건으로 넘어갑시다."],["それにしても","それにしても","etc","그나저나, 그렇다 해도","それにしても、今日は暑いね。","그나저나 오늘은 덥네."],["とはいえ","とはいえ","etc","그렇다고는 해도","春になった。とはいえ、まだ朝は寒い。","봄이 되었다. 그렇다고는 해도 아직 아침은 춥다."],["アピール","アピール","kata","어필, 호소","面接で自分の長所をアピールした。","면접에서 자신의 장점을 어필했다."],["アドバイス","アドバイス","kata","조언","先輩にアドバイスをもらった。","선배에게 조언을 받았다."],["アンケート","アンケート","kata","설문 조사","授業の後にアンケートに答えた。","수업 후에 설문에 응답했다."],["イメージ","イメージ","kata","이미지, 인상","実際に会ったら、イメージと全然違った。","실제로 만났더니 이미지와 전혀 달랐다."],["インタビュー","インタビュー","kata","인터뷰","試合の後、選手がインタビューに答えた。","경기 후 선수가 인터뷰에 응했다."],["エネルギー","エネルギー","kata","에너지","太陽のエネルギーを電気に変える。","태양 에너지를 전기로 바꾼다."],["オーバー","オーバー","kata","초과, 과장","荷物の重さが制限をオーバーした。","짐의 무게가 제한을 초과했다."],["カタログ","カタログ","kata","카탈로그","カタログを見て家具を選んだ。","카탈로그를 보고 가구를 골랐다."],["キャンセル","キャンセル","kata","취소","急用で予約をキャンセルした。","급한 일로 예약을 취소했다."],["キャリア","キャリア","kata","경력, 커리어","海外でキャリアを積みたい。","해외에서 경력을 쌓고 싶다."],["クレーム","クレーム","kata","불만, 항의","客からクレームが来た。","손님에게서 항의가 들어왔다."],["コスト","コスト","kata","비용, 원가","材料を変えてコストを下げた。","재료를 바꿔서 비용을 낮췄다."],["コミュニケーション","コミュニケーション","kata","의사소통","家族とのコミュニケーションを大切にしている。","가족과의 소통을 소중히 하고 있다."],["コメント","コメント","kata","코멘트, 댓글","記事にたくさんのコメントがついた。","기사에 많은 댓글이 달렸다."],["サイズ","サイズ","kata","사이즈, 치수","もう少し大きいサイズはありますか。","조금 더 큰 사이즈는 있습니까?"],["ジャンル","ジャンル","kata","장르","どんなジャンルの音楽が好きですか。","어떤 장르의 음악을 좋아합니까?"],["スケジュール","スケジュール","kata","스케줄, 일정","来週のスケジュールを確認した。","다음 주 스케줄을 확인했다."],["ストレス","ストレス","kata","스트레스","運動はストレスの解消になる。","운동은 스트레스 해소가 된다."],["スムーズ","スムーズ","kata","순조로움, 매끄러움","準備のおかげで会議はスムーズに進んだ。","준비 덕분에 회의는 순조롭게 진행되었다."],["セール","セール","kata","세일, 할인 판매","デパートのセールで靴を買った。","백화점 세일에서 구두를 샀다."],["ターゲット","ターゲット","kata","타깃, 대상","この商品は若い女性をターゲットにしている。","이 상품은 젊은 여성을 타깃으로 하고 있다."],["タイミング","タイミング","kata","타이밍","話しかけるタイミングがなかった。","말을 걸 타이밍이 없었다."],["チャンス","チャンス","kata","기회","こんなチャンスは二度と来ない。","이런 기회는 두 번 다시 오지 않는다."],["チェック","チェック","kata","체크, 확인","出かける前に持ち物をチェックした。","나가기 전에 소지품을 체크했다."],["テーマ","テーマ","kata","주제, 테마","今回の会議のテーマは環境問題だ。","이번 회의의 주제는 환경 문제다."],["データ","データ","kata","데이터","実験のデータをグラフにまとめた。","실험 데이터를 그래프로 정리했다."],["トラブル","トラブル","kata","트러블, 문제","旅行中にトラブルに巻き込まれた。","여행 중에 문제에 휘말렸다."],["ニーズ","ニーズ","kata","요구, 수요","客のニーズに合った商品を開発する。","고객의 요구에 맞는 상품을 개발한다."],["ノルマ","ノルマ","kata","할당량","今月の営業のノルマを達成した。","이번 달 영업 할당량을 달성했다."],["バランス","バランス","kata","균형","仕事と生活のバランスが大切だ。","일과 생활의 균형이 중요하다."],["パターン","パターン","kata","패턴","彼の失敗はいつも同じパターンだ。","그의 실패는 항상 같은 패턴이다."],["ヒント","ヒント","kata","힌트","先生がクイズのヒントをくれた。","선생님이 퀴즈 힌트를 주었다."],["プライバシー","プライバシー","kata","사생활","他人のプライバシーを守るべきだ。","타인의 사생활을 지켜야 한다."],["プラン","プラン","kata","계획, 플랜","夏休みの旅行のプランを立てた。","여름휴가 여행 계획을 세웠다."],["ブーム","ブーム","kata","붐, 유행","今、キャンプがブームになっている。","지금 캠핑이 붐이다."],["ペース","ペース","kata","페이스, 속도","自分のペースで勉強を続けよう。","자기 속도로 공부를 계속하자."],["ベテラン","ベテラン","kata","베테랑","彼はこの道三十年のベテランだ。","그는 이 분야 30년 경력의 베테랑이다."],["ボランティア","ボランティア","kata","자원봉사(자)","週末は公園の清掃のボランティアをしている。","주말에는 공원 청소 자원봉사를 하고 있다."],["マナー","マナー","kata","매너, 예절","電車の中で電話するのはマナー違反だ。","전철 안에서 전화하는 것은 매너 위반이다."],["メリット","メリット","kata","장점, 이점","在宅勤務には多くのメリットがある。","재택근무에는 많은 이점이 있다."],["デメリット","デメリット","kata","단점, 불리한 점","便利だが、デメリットもある。","편리하지만 단점도 있다."],["ユーモア","ユーモア","kata","유머","彼の話にはユーモアがある。","그의 이야기에는 유머가 있다."],["ラッシュ","ラッシュ","kata","러시아워, 혼잡","朝のラッシュを避けて早く家を出た。","아침 출근길 혼잡을 피해 일찍 집을 나섰다."],["リラックス","リラックス","kata","긴장을 풂, 휴식","温泉に入ってリラックスした。","온천에 들어가 긴장을 풀었다."],["ルール","ルール","kata","규칙, 룰","ゲームのルールを説明します。","게임 규칙을 설명하겠습니다."],["レベル","レベル","kata","수준, 레벨","このクラスはレベルが高い。","이 반은 수준이 높다."],["ワンパターン","ワンパターン","kata","판에 박힘, 단조로움","毎日の料理がワンパターンになってきた。","매일 요리가 판에 박힌 듯 똑같아졌다."],["アレルギー","アレルギー","kata","알레르기","私は卵のアレルギーがある。","나는 달걀 알레르기가 있다."],["カロリー","カロリー","kata","칼로리","このケーキはカロリーが高い。","이 케이크는 칼로리가 높다."],["リサイクル","リサイクル","kata","재활용","ペットボトルはリサイクルされる。","페트병은 재활용된다."],["マイペース","マイペース","kata","자기 페이스대로 함","彼はマイペースで、周りを気にしない。","그는 자기 페이스대로라 주변을 신경 쓰지 않는다."]];
+const VERSION = '261017-e617592';
+
+const POS = { n: '명사', vs: 'する동사', v: '동사', i: 'い형용사', na: 'な형용사', adv: '부사', kata: '가타카나어', etc: '접속사·기타' };
+const INTERVALS = [0, 1, 2, 4, 7, 15, 30];   // 단계별 다음 복습까지 날짜 수
+const MASTER = 5;                             // 이 단계 이상이면 "외움"
+const MODELS = ['gemini-3.8-flash', 'gemini-3.6-flash', 'gemini-3.5-flash-lite', 'gemini-3.1-flash-lite', 'gemini-2.5-flash'];
+const WORDS = VOCAB.map((t, id) => ({ id, w: t[0], r: t[1], p: t[2], m: t[3], ex: t[4], ko: t[5], k: t[0] + '|' + t[1] }));
+
+/* ---------- 공통 ---------- */
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const store = {
+  get(k, d) { try { const v = localStorage.getItem('n2tango.' + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem('n2tango.' + k, JSON.stringify(v)); return true; } catch (e) { return false; } },
+};
+function dayStr(d) { const z = n => String(n).padStart(2, '0'); return d.getFullYear() + '-' + z(d.getMonth() + 1) + '-' + z(d.getDate()); }
+function today() { return dayStr(new Date()); }
+function addDays(s, n) { const [y, m, d] = s.split('-').map(Number); return dayStr(new Date(y, m - 1, d + n)); }
+function rng(seed) { let a = seed; return () => { a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function shuffle(arr, rand = Math.random) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(rand() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
+function toHira(s) { return s.replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60)); }
+
+let toastTimer;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+const ICON = {
+  speak: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z" fill="currentColor" fill-opacity=".15"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>',
+  spark: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3.5c.6 4.2 2.3 5.9 6.5 6.5-4.2.6-5.9 2.3-6.5 6.5-.6-4.2-2.3-5.9-6.5-6.5 4.2-.6 5.9-2.3 6.5-6.5z" fill="currentColor" fill-opacity=".15"/><path d="M18.5 16v4M16.5 18h4"/></svg>',
+};
+
+/* ---------- 상태 ---------- */
+let P = store.get('progress', {});            // 단어키 → {s: 단계, d: 다음 복습일, w: 틀린 횟수, f: 처음 본 날}
+const S = Object.assign({ newPerDay: 20, showReading: false, rate: 0.9, apiKey: '', model: 'auto', quizMode: 'meaning', tab: 'study' }, store.get('settings', {}));
+let D = store.get('daily', {});               // 오늘 기록 {date, newDone, answered, bonus}
+const prog = w => P[w.k];
+function daily() { if (D.date !== today()) D = { date: today(), newDone: 0, answered: 0, bonus: 0 }; return D; }
+function saveAll() { store.set('progress', P); store.set('daily', D); }
+function saveSettings() { store.set('settings', S); }
+function status(w) { const e = prog(w); if (!e) return 'none'; return e.s >= MASTER ? 'master' : 'learning'; }
+function isHard(w) { const e = prog(w); return !!e && e.w >= 2 && e.s < MASTER; }
+function setForgot(w) {
+  const e = prog(w) || { s: 0, w: 0, f: today() };
+  e.s = 0; e.w = (e.w || 0) + 1; e.d = today(); P[w.k] = e;
+}
+
+/* ---------- 발음 ---------- */
+let jaVoice = null;
+function loadVoices() { if (!('speechSynthesis' in window)) return; jaVoice = speechSynthesis.getVoices().find(v => /^ja([-_]|$)/i.test(v.lang)) || null; }
+if ('speechSynthesis' in window) { loadVoices(); speechSynthesis.addEventListener('voiceschanged', loadVoices); }
+function speak(text) {
+  if (!('speechSynthesis' in window)) { toast('이 브라우저는 발음 듣기를 지원하지 않아요.'); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'ja-JP'; u.rate = S.rate; if (jaVoice) u.voice = jaVoice;
+  u.onerror = e => { if (e.error !== 'interrupted' && e.error !== 'canceled') toast('일본어 음성을 재생하지 못했어요. 휴대폰 설정의 「텍스트 음성 변환」에서 일본어를 설치해 주세요.'); };
+  speechSynthesis.speak(u);
+}
+
+/* ---------- 예문 강조 ---------- */
+function highlight(w, text = w.ex) {
+  const ex = esc(text);
+  const keys = [w.w, (w.p === 'v' || w.p === 'i') ? w.w.slice(0, -1) : '', w.r].filter(Boolean);
+  for (const k of keys) {
+    const ek = esc(k), i = ex.indexOf(ek);
+    if (i >= 0) return ex.slice(0, i) + '<mark>' + ek + '</mark>' + ex.slice(i + ek.length);
+  }
+  return ex;
+}
+
+/* ---------- 학습 (간격 반복) ---------- */
+const NEW_ORDER = shuffle(WORDS.map(w => w.id), rng(20261015));   // 새 단어는 품사가 섞이도록 고정 순서로
+let queue = [], revealed = false, undo = null, queueDirty = true;
+
+function buildQueue() {
+  const t = today(), d = daily();
+  const due = shuffle(WORDS.filter(w => prog(w) && prog(w).d <= t).map(w => w.id));
+  const room = Math.max(0, S.newPerDay + (d.bonus || 0) - d.newDone);
+  const fresh = NEW_ORDER.filter(id => !prog(WORDS[id])).slice(0, room);
+  queue = [];
+  while (due.length || fresh.length) {               // 복습 2장마다 새 단어 1장
+    if (due.length) queue.push(due.shift());
+    if (due.length) queue.push(due.shift());
+    if (fresh.length) queue.push(fresh.shift());
+  }
+  revealed = false; undo = null; queueDirty = false;
+}
+
+function answer(known) {
+  if (!queue.length) return;
+  const id = queue[0], w = WORDS[id], d = daily(), prev = prog(w);
+  undo = { k: w.k, prev: prev ? { ...prev } : null, d: { ...d }, queue: queue.slice() };
+  const e = prev ? { ...prev } : { s: 0, w: 0, f: today() };
+  if (!prev) d.newDone++;
+  d.answered++;
+  queue.shift();
+  if (known) {
+    e.s = Math.min(e.s + 1, INTERVALS.length - 1);
+    e.d = addDays(today(), INTERVALS[e.s]);
+  } else {
+    e.s = 0; e.w = (e.w || 0) + 1; e.d = today();
+    queue.splice(Math.min(3, queue.length), 0, id);    // 몇 장 뒤에 다시
+  }
+  P[w.k] = e; saveAll();
+  revealed = false; renderStudy();
+}
+
+function undoAnswer() {
+  if (!undo) return;
+  if (undo.prev) P[undo.k] = undo.prev; else delete P[undo.k];
+  D = undo.d; queue = undo.queue; undo = null; revealed = true;
+  saveAll(); renderStudy(); toast('방금 답을 되돌렸어요.');
+}
+
+function renderStudy() {
+  if (queueDirty) buildQueue();
+  const view = $('#view-study'), d = daily();
+  const master = WORDS.filter(w => status(w) === 'master').length;
+  const seen = WORDS.filter(w => prog(w)).length;
+  const reviewsLeft = queue.filter(id => prog(WORDS[id])).length;
+  const newLeft = queue.length - reviewsLeft;
+  let html = `
+    <div class="stats">
+      <div class="stats-row"><span>외운 단어</span><b>${master}</b><span>/ ${WORDS.length}</span><span class="push">본 단어 ${seen}</span></div>
+      <div class="meter" aria-hidden="true"><i style="width:${(master / WORDS.length * 100).toFixed(1)}%"></i></div>
+    </div>`;
+  if (!queue.length) {
+    const tomorrow = addDays(today(), 1);
+    const dueTomorrow = WORDS.filter(w => prog(w) && prog(w).d === tomorrow).length;
+    const remainingNew = WORDS.length - seen;
+    html += `
+      <div class="panel">
+        <h2>${d.answered ? '오늘 학습을 마쳤어요' : '오늘은 학습할 카드가 없어요'}</h2>
+        <div class="figures">
+          <div class="figure"><b>${d.answered}</b><span>오늘 넘긴 카드</span></div>
+          <div class="figure"><b>${d.newDone}</b><span>오늘 새 단어</span></div>
+          <div class="figure"><b>${dueTomorrow}</b><span>내일 복습</span></div>
+        </div>
+        <div class="stack">
+          ${remainingNew ? '<button class="btn primary" data-act="more-new">새 단어 10개 더 배우기</button>' : '<p>모든 단어를 한 번씩 봤어요. 복습만 남았어요.</p>'}
+          <button class="btn" data-act="go-quiz">퀴즈로 확인하기</button>
+        </div>
+      </div>`;
+  } else {
+    const w = WORDS[queue[0]], e = prog(w);
+    const chips = [`<span class="chip">${POS[w.p]}</span>`];
+    if (!e) chips.push('<span class="chip new">새 단어</span>');
+    else if (isHard(w)) chips.push('<span class="chip hard">자주 틀림</span>');
+    const showR = revealed || S.showReading;
+    html += `
+      <article class="card" aria-live="polite">
+        <div class="card-top">${chips.join('')}
+          <button class="icon-btn" data-act="speak-word" aria-label="단어 발음 듣기">${ICON.speak}</button>
+        </div>
+        <div class="face" data-act="reveal">
+          <div class="reading">${showR && w.r !== w.w ? esc(w.r) : ''}</div>
+          <div class="word" lang="ja">${esc(w.w)}</div>
+        </div>
+        ${revealed ? `
+        <div class="back">
+          <p class="meaning">${esc(w.m)}</p>
+          <div class="ex">
+            <p class="ja" lang="ja">${highlight(w)}</p>
+            <button class="icon-btn" data-act="speak-ex" aria-label="예문 발음 듣기">${ICON.speak}</button>
+            <p class="ko">${esc(w.ko)}</p>
+          </div>
+          <button class="link" data-act="detail" data-id="${w.id}">${ICON.spark}자세히 보기 · AI에게 묻기</button>
+        </div>` : '<p class="hint">카드를 누르면 뜻과 예문이 나와요</p>'}
+      </article>
+      ${revealed ? `
+      <div class="actions">
+        <button class="btn big ng" data-act="no">몰라요</button>
+        <button class="btn big ok" data-act="yes">알아요</button>
+      </div>` : `
+      <div class="actions one"><button class="btn big primary" data-act="reveal">뜻 보기</button></div>`}
+      <div class="sub">
+        <span>남은 카드 <b>${queue.length}</b> · 복습 ${reviewsLeft} · 새 단어 ${newLeft}</span>
+        ${undo ? '<button class="link" data-act="undo">되돌리기</button>' : ''}
+      </div>`;
+  }
+  view.innerHTML = html;
+  updateBadge();
+}
+
+function updateBadge() {
+  const b = $('#badge');
+  b.hidden = !queue.length; b.textContent = queue.length > 99 ? '99+' : queue.length;
+}
+
+$('#view-study').addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if (!el) return;
+  const act = el.dataset.act, w = queue.length ? WORDS[queue[0]] : null;
+  if (act === 'reveal' && !revealed) { revealed = true; renderStudy(); }
+  else if (act === 'yes') answer(true);
+  else if (act === 'no') answer(false);
+  else if (act === 'undo') undoAnswer();
+  else if (act === 'speak-word' && w) speak(w.r);
+  else if (act === 'speak-ex' && w) speak(w.ex);
+  else if (act === 'detail') openDetail(+el.dataset.id);
+  else if (act === 'more-new') { daily().bonus = (D.bonus || 0) + 10; saveAll(); queueDirty = true; renderStudy(); }
+  else if (act === 'go-quiz') switchTab('quiz');
+});
+
+/* ---------- 퀴즈 ---------- */
+const QUIZ_LEN = 10;
+let Q = { items: null };
+
+function tokens(m) { return m.replace(/\([^)]*\)/g, ' ').split(/[,·/]/).map(s => s.trim()).filter(Boolean); }
+function overlaps(a, b) { return a.some(x => b.some(y => x === y || (x.length >= 2 && y.includes(x)) || (y.length >= 2 && x.includes(y)))); }
+
+function makeQuestion(word, mode) {
+  const key = mode === 'reading' ? x => x.r : mode === 'word' ? x => x.w : x => x.m;
+  const tA = tokens(word.m);
+  const ok = x => x.id !== word.id && key(x) !== key(word) && !overlaps(tA, tokens(x.m)) &&
+    (mode !== 'reading' || (x.w !== x.r && x.r !== word.r));
+  let cands = shuffle(WORDS.filter(x => x.p === word.p && ok(x)));
+  if (mode === 'reading') {   // 길이가 비슷한 읽기를 보기로
+    cands.sort((a, b) => Math.abs(a.r.length - word.r.length) - Math.abs(b.r.length - word.r.length));
+    cands = shuffle(cands.slice(0, 10));
+  }
+  if (cands.length < 3) cands = cands.concat(shuffle(WORDS.filter(x => x.p !== word.p && ok(x))));
+  const opts = [word], used = new Set([key(word)]);
+  for (const c of cands) { if (opts.length === 4) break; if (!used.has(key(c))) { used.add(key(c)); opts.push(c); } }
+  return { id: word.id, opts: shuffle(opts.map(o => o.id)), pick: null };
+}
+
+function quizPool(mode, scope) {
+  let pool = scope === 'learned' ? WORDS.filter(w => prog(w)) : WORDS.slice();
+  if (mode === 'reading') pool = pool.filter(w => w.w !== w.r);
+  return pool;
+}
+
+function startQuiz() {
+  const mode = S.quizMode;
+  let scope = Q.scope || 'auto';
+  if (scope === 'auto') scope = quizPool(mode, 'learned').length >= QUIZ_LEN ? 'learned' : 'all';
+  let pool = quizPool(mode, scope);
+  if (pool.length < 4) { pool = quizPool(mode, 'all'); scope = 'all'; toast('학습한 단어가 적어서 전체 단어에서 냈어요.'); }
+  const picks = shuffle(pool.slice()).slice(0, QUIZ_LEN);
+  Q = { mode, scope: Q.scope || 'auto', used: scope, items: picks.map(w => makeQuestion(w, mode)), idx: 0, score: 0, wrong: [] };
+  renderQuiz();
+}
+
+function optLabel(w, mode) { return mode === 'meaning' ? esc(w.m) : mode === 'reading' ? esc(w.r) : esc(w.w); }
+
+function renderQuiz() {
+  const view = $('#view-quiz');
+  if (!Q.items) {
+    const learned = quizPool(S.quizMode, 'learned').length;
+    const scope = Q.scope || 'auto';
+    view.innerHTML = `
+      <div class="panel">
+        <h2>4지선다 퀴즈</h2>
+        <div><p class="field-label">문제 유형</p>
+          <div class="seg" role="group" aria-label="문제 유형">
+            ${[['meaning', '뜻 고르기'], ['word', '단어 고르기'], ['reading', '읽기 고르기']].map(([v, l]) => `<button data-act="mode" data-v="${v}" aria-pressed="${S.quizMode === v}">${l}</button>`).join('')}
+          </div></div>
+        <div><p class="field-label">출제 범위</p>
+          <div class="seg" role="group" aria-label="출제 범위">
+            ${[['auto', '자동'], ['learned', `학습한 단어 ${learned}`], ['all', `전체 ${quizPool(S.quizMode, 'all').length}`]].map(([v, l]) => `<button data-act="scope" data-v="${v}" aria-pressed="${scope === v}">${l}</button>`).join('')}
+          </div></div>
+        <p class="note">자동: 학습한 단어가 ${QUIZ_LEN}개 이상이면 그 안에서, 아니면 전체에서 ${QUIZ_LEN}문제를 내요. 틀린 단어는 오늘 학습 카드에 다시 나와요.</p>
+        <button class="btn big primary" data-act="start">${QUIZ_LEN}문제 시작</button>
+      </div>`;
+    return;
+  }
+  if (Q.idx >= Q.items.length) {
+    const n = Q.items.length;
+    view.innerHTML = `
+      <div class="panel">
+        <h2>${Q.score === n ? '전부 맞혔어요' : `${n}문제 중 ${Q.score}문제 맞혔어요`}</h2>
+        <div class="meter" aria-hidden="true"><i style="width:${Q.score / n * 100}%"></i></div>
+        ${Q.wrong.length ? `<p>틀린 단어 ${Q.wrong.length}개는 오늘 학습 카드에 추가했어요.</p>
+          <ul class="rows wrong-list">${Q.wrong.map(id => rowHtml(WORDS[id])).join('')}</ul>` : ''}
+        <div class="stack">
+          <button class="btn big primary" data-act="start">한 번 더</button>
+          ${Q.wrong.length ? '<button class="btn" data-act="go-study">틀린 단어 학습하기</button>' : ''}
+          <button class="btn ghost" data-act="setup">유형 바꾸기</button>
+        </div>
+      </div>`;
+    return;
+  }
+  const it = Q.items[Q.idx], w = WORDS[it.id], mode = Q.mode;
+  const picked = it.pick != null;
+  const qBody = mode === 'word'
+    ? `<p class="q-ask">이 뜻의 단어는?</p><p class="q-text">${esc(w.m)}</p>`
+    : `<p class="q-ask">${mode === 'reading' ? '읽는 법은?' : '뜻은?'}</p><div class="word" lang="ja">${esc(w.w)}</div>`;
+  const opts = it.opts.map(id => {
+    const o = WORDS[id];
+    let cls = 'opt' + (mode === 'meaning' ? '' : ' jp'), mk = '';
+    if (picked && id === it.id) { cls += ' right'; mk = '정답'; }
+    else if (picked && id === it.pick) { cls += ' wrong'; mk = '내 답'; }
+    return `<button class="${cls}" data-act="pick" data-id="${id}" ${picked ? 'disabled' : ''} ${mode === 'meaning' ? '' : 'lang="ja"'}>${optLabel(o, mode)}${mk ? `<span class="mk">${mk}</span>` : ''}</button>`;
+  }).join('');
+  view.innerHTML = `
+    <div class="q-head"><span>${Q.idx + 1} / ${Q.items.length}</span><span>맞힘 ${Q.score}</span></div>
+    <div class="q-card">${qBody}</div>
+    <div class="options">${opts}</div>
+    ${picked ? `
+      <div class="explain">
+        <div class="jw" lang="ja">${esc(w.w)}<small>${w.r !== w.w ? esc(w.r) : ''}</small></div>
+        <div>${esc(w.m)}</div>
+        <p class="ja" lang="ja">${highlight(w)}</p>
+        <p class="ko">${esc(w.ko)}</p>
+      </div>
+      <div class="actions"><button class="btn" data-act="detail" data-id="${w.id}">자세히</button>
+        <button class="btn primary" data-act="next">${Q.idx + 1 < Q.items.length ? '다음 문제' : '결과 보기'}</button></div>` : ''}`;
+}
+
+$('#view-quiz').addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if (!el) return;
+  const act = el.dataset.act;
+  if (act === 'mode') { S.quizMode = el.dataset.v; saveSettings(); renderQuiz(); }
+  else if (act === 'scope') { Q.scope = el.dataset.v; renderQuiz(); }
+  else if (act === 'start') startQuiz();
+  else if (act === 'setup') { Q = { items: null, scope: Q.scope }; renderQuiz(); }
+  else if (act === 'pick') {
+    const it = Q.items[Q.idx]; if (it.pick != null) return;
+    it.pick = +el.dataset.id;
+    if (it.pick === it.id) Q.score++;
+    else { Q.wrong.push(it.id); setForgot(WORDS[it.id]); saveAll(); buildQueue(); updateBadge(); }
+    renderQuiz();
+  }
+  else if (act === 'next') { Q.idx++; renderQuiz(); $('#main').scrollTop = 0; }
+  else if (act === 'detail') openDetail(+el.dataset.id);
+  else if (act === 'go-study') switchTab('study');
+  else if (act === 'row') openDetail(+el.dataset.id);
+});
+
+/* ---------- 단어장 ---------- */
+const L = { q: '', f: 'all', limit: 120 };
+function rowHtml(w) {
+  const st = isHard(w) ? 'hard' : status(w);
+  return `<li class="row" data-act="row" data-id="${w.id}" tabindex="0">
+    <span class="dot ${st}" aria-hidden="true"></span>
+    <span class="jw" lang="ja">${esc(w.w)}<small>${w.r !== w.w ? esc(w.r) : POS[w.p]}</small></span>
+    <span class="m">${esc(w.m)}</span></li>`;
+}
+function listMatches() {
+  const q = L.q.trim().toLowerCase(), qh = toHira(q);
+  return WORDS.filter(w => {
+    if (L.f === 'hard' ? !isHard(w) : (L.f !== 'all' && status(w) !== L.f)) return false;
+    if (!q) return true;
+    return w.w.includes(q) || toHira(w.r).includes(qh) || w.m.toLowerCase().includes(q);
+  });
+}
+function renderList() {
+  const hits = listMatches();
+  $('#count').textContent = `${hits.length}개 단어`;
+  $('#rows').innerHTML = hits.length ? hits.slice(0, L.limit).map(rowHtml).join('') : '<li class="empty">찾는 단어가 없어요.</li>';
+  $('#btn-more').hidden = hits.length <= L.limit;
+  $$('#filters button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.f === L.f)));
+}
+let searchTimer;
+$('#q').addEventListener('input', e => { clearTimeout(searchTimer); searchTimer = setTimeout(() => { L.q = e.target.value; L.limit = 120; renderList(); }, 120); });
+$('#filters').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; L.f = b.dataset.f; L.limit = 120; renderList(); });
+$('#btn-more').addEventListener('click', () => { L.limit += 120; renderList(); });
+$('#rows').addEventListener('click', e => { const r = e.target.closest('[data-act="row"]'); if (r) openDetail(+r.dataset.id); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.matches && e.target.matches('.row')) openDetail(+e.target.dataset.id);
+});
+
+/* ---------- 시트 ---------- */
+function openSheet(dlg) {
+  if (dlg.open) return;
+  $$('dialog[open]').forEach(x => x.close());
+  dlg.showModal();
+  history.pushState({ sheet: dlg.id }, '');
+}
+function closeSheet(dlg) {
+  if (!dlg.open) return;
+  if (history.state && history.state.sheet === dlg.id) history.back(); else dlg.close();
+}
+window.addEventListener('popstate', () => $$('dialog[open]').forEach(d => d.close()));
+$$('dialog.sheet').forEach(dlg => {
+  dlg.addEventListener('cancel', e => { e.preventDefault(); closeSheet(dlg); });
+  dlg.addEventListener('click', e => { if (e.target === dlg || e.target.closest('[data-close]')) closeSheet(dlg); });
+});
+
+/* ---------- 단어 상세 + AI ---------- */
+let detailWord = null;
+function openDetail(id) {
+  const w = WORDS[id]; detailWord = w;
+  const e = prog(w), st = status(w);
+  const stLabel = st === 'none' ? '안 본 단어' : st === 'master' ? '외움' : `학습 중 · ${e.s}단계`;
+  $('#d-title').textContent = POS[w.p];
+  $('#detail-body').innerHTML = `
+    <div class="d-word">
+      <div class="reading" lang="ja">${w.r !== w.w ? esc(w.r) : ''}</div>
+      <div class="row-inline"><div class="word" lang="ja">${esc(w.w)}</div>
+        <button class="icon-btn" data-act="speak" data-t="${esc(w.r)}" aria-label="단어 발음 듣기">${ICON.speak}</button></div>
+    </div>
+    <p class="d-meaning">${esc(w.m)}</p>
+    <div class="ex">
+      <p class="ja" lang="ja">${highlight(w)}</p>
+      <button class="icon-btn" data-act="speak" data-t="${esc(w.ex)}" aria-label="예문 발음 듣기">${ICON.speak}</button>
+      <p class="ko">${esc(w.ko)}</p>
+    </div>
+    <div class="btn-row" style="justify-content:space-between;align-items:center">
+      <span class="chip ${st === 'master' ? 'done' : isHard(w) ? 'hard' : ''}">${stLabel}${e && e.w ? ` · 틀림 ${e.w}` : ''}</span>
+      <button class="btn small" data-act="to-review">${e ? '오늘 다시 복습' : '오늘 학습에 넣기'}</button>
+    </div>
+    <div class="stack">
+      <p class="section-title">${ICON.spark}Gemini에게 묻기</p>
+      ${S.apiKey ? '' : '<p class="note">API 키가 없으면 질문을 복사한 뒤 Gemini 앱을 열어 드려요. 설정에서 키를 넣으면 여기서 바로 답을 볼 수 있어요.</p>'}
+      <div class="ai-btns">
+        <button class="btn small" data-act="ai" data-kind="examples">예문 더 보기</button>
+        <button class="btn small" data-act="ai" data-kind="nuance">뉘앙스 설명</button>
+      </div>
+      <form class="ask" id="ask-form">
+        <input id="ask-q" placeholder="예: 비슷한 단어와 차이는?" enterkeyhint="send" aria-label="이 단어에 대해 질문">
+        <button class="btn small primary" type="submit">묻기</button>
+      </form>
+      <div class="ai-out" id="ai-out" aria-live="polite"></div>
+    </div>`;
+  openSheet($('#sheet-detail'));
+}
+
+$('#detail-body').addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if (!el || !detailWord) return;
+  const act = el.dataset.act, w = detailWord;
+  if (act === 'speak') speak(el.dataset.t);
+  else if (act === 'to-review') {
+    P[w.k] = Object.assign({ w: 0, f: today() }, prog(w), { s: 0, d: today() });
+    saveAll(); queueDirty = true; renderStudy(); toast('오늘 학습 카드에 넣었어요.'); el.disabled = true;
+  }
+  else if (act === 'ai') askAI(w, el.dataset.kind);
+  else if (act === 'handoff') handoff(w, el.dataset.kind, el.dataset.q || '');
+  else if (act === 'regen') askAI(w, el.dataset.kind, el.dataset.q || '', true);
+});
+$('#detail-body').addEventListener('submit', e => {
+  e.preventDefault();
+  const q = $('#ask-q').value.trim();
+  if (!q) { $('#ask-q').focus(); return; }
+  askAI(detailWord, 'ask', q);
+});
+
+const SYS = '너는 JLPT N2를 준비하는 한국어 사용자를 돕는 일본어 선생님이다. 설명은 한국어로 짧고 정확하게 쓰고, 일본어 예문은 자연스러운 N2 수준 문장으로 쓴다. 반드시 요청한 JSON 형식으로만 답한다.';
+function wordLine(w) { return `일본어 단어 「${w.w}」(읽기: ${w.r}, 품사: ${POS[w.p]}, 뜻: ${w.m})`; }
+function aiPrompt(w, kind, q) {
+  if (kind === 'examples') return `${wordLine(w)}를 쓴 예문 3개를 만들어라. 서로 다른 상황(일상·회사·뉴스 등)으로 쓰고, 이미 있는 예문 「${w.ex}」와 겹치지 않게 하라. 각 예문에 전체 히라가나 읽기와 한국어 번역을 붙여라.
+JSON 형식: {"examples":[{"ja":"예문","kana":"히라가나 읽기","ko":"한국어 번역"}]}`;
+  if (kind === 'nuance') return `${wordLine(w)}의 뉘앙스와 쓰임을 설명하라. 비슷한 단어와의 차이, 자주 쓰는 표현도 알려 줘라.
+JSON 형식: {"summary":"핵심 뉘앙스 1~2문장","points":["쓰임·주의점 (최대 3개)"],"similar":[{"word":"비슷한 단어","reading":"읽기","diff":"차이 한 문장"}],"phrases":[{"ja":"자주 쓰는 표현","ko":"뜻"}]}`;
+  return `${wordLine(w)}에 대한 질문: ${q}
+JSON 형식: {"answer":"한국어 답변 (필요하면 일본어 예문 포함, 6문장 이내)"}`;
+}
+function handoffPrompt(w, kind, q) {
+  const head = `JLPT N2 공부 중이에요. 일본어 단어 「${w.w}」(${w.r}, 뜻: ${w.m})`;
+  if (kind === 'examples') return `${head}를 쓴 자연스러운 예문 3개를 만들어 주세요. 각 예문에 히라가나 읽기와 한국어 번역을 붙여 주세요.`;
+  if (kind === 'nuance') return `${head}의 뉘앙스와 쓰임을 한국어로 설명해 주세요. 비슷한 단어와의 차이와 자주 쓰는 표현도 알려 주세요.`;
+  return `${head}에 대해 질문이 있어요. ${q}`;
+}
+
+class AiError extends Error { constructor(code, detail = '') { super(code); this.code = code; this.detail = detail; } }
+function extractText(data) {
+  const parts = data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts;
+  return (parts || []).filter(p => !p.thought).map(p => p.text || '').join('').trim();
+}
+function parseJSON(text) {
+  try { return JSON.parse(text); } catch (e) { /* 아래에서 다시 시도 */ }
+  const a = text.indexOf('{'), b = text.lastIndexOf('}');
+  if (a >= 0 && b > a) { try { return JSON.parse(text.slice(a, b + 1)); } catch (e) { /* 실패 */ } }
+  throw new AiError('parse');
+}
+async function gemini(prompt) {
+  const key = (S.apiKey || '').trim();
+  if (!key) throw new AiError('nokey');
+  let list = S.model === 'auto' ? MODELS.slice() : [S.model];
+  if (S.model === 'auto' && S.lastModel && list.includes(S.lastModel)) list = [S.lastModel, ...list.filter(m => m !== S.lastModel)];
+  let last = null;
+  for (const model of list) {
+    let res;
+    try {
+      res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
+        body: JSON.stringify({
+          systemInstruction: { parts: [{ text: SYS }] },
+          contents: [{ role: 'user', parts: [{ text: prompt }] }],
+          generationConfig: { responseMimeType: 'application/json', temperature: 0.7 },
+        }),
+      });
+    } catch (e) { throw new AiError('network'); }
+    if (res.ok) {
+      const data = await res.json().catch(() => null);
+      const text = extractText(data);
+      if (!text) { last = new AiError(data && data.promptFeedback && data.promptFeedback.blockReason ? 'blocked' : 'empty'); continue; }
+      if (S.lastModel !== model) { S.lastModel = model; saveSettings(); }
+      return { model, json: parseJSON(text) };
+    }
+    let msg = '';
+    try { const j = await res.json(); msg = (j.error && j.error.message) || ''; } catch (e) { /* 본문 없음 */ }
+    if ((res.status === 400 && /api key/i.test(msg)) || res.status === 401 || res.status === 403) throw new AiError('badkey', msg);
+    last = new AiError(res.status === 429 ? 'quota' : 'model', `${model}: ${res.status} ${msg}`.slice(0, 200));
+  }
+  throw last || new AiError('model');
+}
+const AI_MSG = {
+  badkey: 'API 키가 올바르지 않거나 권한이 없어요. 설정에서 키를 다시 확인해 주세요.',
+  quota: '무료 사용 한도에 도달했어요. 1분쯤 뒤에 다시 시도하거나 Gemini 앱에서 물어보세요.',
+  network: '인터넷에 연결되어 있지 않아요. 연결을 확인해 주세요.',
+  parse: '답을 읽지 못했어요. 다시 시도해 주세요.',
+  blocked: 'Gemini가 이 질문에 답하지 않았어요. 질문을 바꿔 보세요.',
+  empty: '빈 답이 왔어요. 다시 시도해 주세요.',
+  model: '지금 Gemini에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.',
+};
+
+let aiCache = store.get('ai', {});
+function cacheKey(w, kind, q) { return w.k + '#' + kind + (q ? '#' + q : ''); }
+function cachePut(k, v) {
+  aiCache[k] = v;
+  const keys = Object.keys(aiCache);
+  if (keys.length > 150) keys.slice(0, keys.length - 150).forEach(x => delete aiCache[x]);
+  store.set('ai', aiCache);
+}
+
+async function askAI(w, kind, q = '', force = false) {
+  if (!S.apiKey) { handoff(w, kind, q); return; }
+  const out = $('#ai-out');
+  const ck = cacheKey(w, kind, q);
+  if (!force && aiCache[ck]) { out.innerHTML = renderAI(w, kind, aiCache[ck], q); return; }
+  out.innerHTML = '<div class="loading"><span class="spinner"></span>Gemini가 답을 쓰는 중…</div>';
+  $$('#detail-body [data-act="ai"], #ask-form button').forEach(b => b.disabled = true);
+  try {
+    const { model, json } = await gemini(aiPrompt(w, kind, q));
+    const v = { model, json, at: Date.now() };
+    cachePut(ck, v);
+    if (detailWord === w) out.innerHTML = renderAI(w, kind, v, q);
+  } catch (err) {
+    const code = err instanceof AiError ? err.code : 'model';
+    if (detailWord === w) out.innerHTML = `<div class="ai-err"><p>${esc(AI_MSG[code] || AI_MSG.model)}</p>
+      <div class="btn-row"><button class="btn small" data-act="handoff" data-kind="${kind}" data-q="${esc(q)}">Gemini 앱에서 묻기</button></div></div>`;
+  } finally {
+    $$('#detail-body [data-act="ai"], #ask-form button').forEach(b => b.disabled = false);
+  }
+}
+
+function list(v) { return Array.isArray(v) ? v : []; }
+function renderAI(w, kind, v, q) {
+  const j = v.json || {};
+  let body = '';
+  if (kind === 'examples') {
+    body = list(j.examples).slice(0, 5).map(x => `<div class="ai-card">
+      <p class="ja" lang="ja">${highlight(w, String(x.ja || ''))}</p>
+      ${x.kana ? `<p class="kana" lang="ja">${esc(x.kana)}</p>` : ''}
+      <p class="ko">${esc(x.ko || '')}</p>
+      <div class="ai-meta"><span></span><button class="icon-btn" data-act="speak" data-t="${esc(x.ja || '')}" aria-label="예문 발음 듣기">${ICON.speak}</button></div></div>`).join('');
+  } else if (kind === 'nuance') {
+    body = `<div class="ai-card">
+      ${j.summary ? `<p><b>${esc(j.summary)}</b></p>` : ''}
+      ${list(j.points).length ? `<ul>${list(j.points).slice(0, 5).map(p => `<li>${esc(p)}</li>`).join('')}</ul>` : ''}</div>
+      ${list(j.similar).length ? `<div class="ai-card"><p class="field-label">비슷한 단어</p><ul>${list(j.similar).slice(0, 4).map(s =>
+        `<li><span lang="ja">${esc(s.word || '')}</span>${s.reading ? ` <small lang="ja">(${esc(s.reading)})</small>` : ''} — ${esc(s.diff || '')}</li>`).join('')}</ul></div>` : ''}
+      ${list(j.phrases).length ? `<div class="ai-card"><p class="field-label">자주 쓰는 표현</p><ul>${list(j.phrases).slice(0, 5).map(p =>
+        `<li><span lang="ja">${esc(p.ja || '')}</span> — ${esc(p.ko || '')}</li>`).join('')}</ul></div>` : ''}`;
+  } else {
+    body = `<div class="ai-card"><p class="field-label">Q. ${esc(q)}</p><p>${esc(j.answer || '')}</p></div>`;
+  }
+  if (!body.replace(/<[^>]+>/g, '').trim()) body = `<div class="ai-err"><p>${AI_MSG.parse}</p></div>`;
+  return body + `<div class="ai-meta"><span>${esc(v.model || '')}</span>
+    <button class="link" data-act="regen" data-kind="${kind}" data-q="${esc(q)}">다시 받기</button></div>`;
+}
+
+function handoff(w, kind, q) {
+  const text = handoffPrompt(w, kind, q);
+  const copied = () => toast('질문을 복사했어요. Gemini 입력창에 붙여넣기 하세요.');
+  const manual = () => { showHandoffText(text); toast('아래 질문을 복사해서 Gemini에 붙여넣으세요.'); };
+  // 복사는 누른 순간에 시작해야 허용되므로, 결과를 기다리지 않고 바로 Gemini를 연다
+  try { navigator.clipboard.writeText(text).then(copied, manual); } catch (e) { manual(); }
+  window.open('https://gemini.google.com/app', '_blank', 'noopener');
+}
+function showHandoffText(text) {
+  const out = $('#ai-out'); if (!out) return;
+  out.innerHTML = `<div class="ai-card"><p class="note">아래 질문을 길게 눌러 복사한 뒤 Gemini에 붙여넣으세요.</p>
+    <textarea readonly aria-label="Gemini에 보낼 질문">${esc(text)}</textarea></div>`;
+}
+
+/* ---------- 설정 ---------- */
+let installEvt = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; $('#btn-install').hidden = false; });
+function fillSettings() {
+  $$('#set-new button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.v === S.newPerDay)));
+  $$('#set-rate button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.v === S.rate)));
+  $('#set-reading').checked = !!S.showReading;
+  $('#set-key').value = S.apiKey || '';
+  $('#set-model').value = S.model;
+  $('#import-box').hidden = true; $('#reset-confirm').hidden = true;
+  $('#about').textContent = `단어 ${WORDS.length}개 · 버전 ${VERSION}`;
+}
+$('#btn-settings').addEventListener('click', () => { fillSettings(); openSheet($('#sheet-settings')); });
+$('#set-new').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  S.newPerDay = +b.dataset.v; saveSettings(); fillSettings(); queueDirty = true; renderStudy();
+});
+$('#set-rate').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  S.rate = +b.dataset.v; saveSettings(); fillSettings(); speak('はつおん');
+});
+$('#set-reading').addEventListener('change', e => { S.showReading = e.target.checked; saveSettings(); renderStudy(); });
+$('#set-model').addEventListener('change', e => { S.model = e.target.value; saveSettings(); });
+$('#btn-key-save').addEventListener('click', () => {
+  S.apiKey = $('#set-key').value.trim(); saveSettings();
+  toast(S.apiKey ? '키를 저장했어요. 「연결 확인」으로 확인해 보세요.' : '키를 비웠어요.');
+});
+$('#btn-key-show').addEventListener('click', e => {
+  const i = $('#set-key'); i.type = i.type === 'password' ? 'text' : 'password';
+  e.target.textContent = i.type === 'password' ? '키 보기' : '키 숨기기';
+});
+$('#btn-key-del').addEventListener('click', () => { S.apiKey = ''; saveSettings(); fillSettings(); toast('키를 삭제했어요.'); });
+$('#btn-key-test').addEventListener('click', async e => {
+  const typed = $('#set-key').value.trim();
+  if (typed && typed !== S.apiKey) { S.apiKey = typed; saveSettings(); }
+  if (!S.apiKey) { toast('먼저 키를 붙여넣고 저장해 주세요.'); return; }
+  const b = e.target; b.disabled = true; b.textContent = '확인 중…';
+  try { const { model } = await gemini('연결 확인이다. {"ok":true} 만 답하라.'); toast(`연결됐어요 (${model})`); }
+  catch (err) { toast(AI_MSG[err.code] || AI_MSG.model); }
+  finally { b.disabled = false; b.textContent = '연결 확인'; }
+});
+$('#btn-export').addEventListener('click', () => {
+  const data = JSON.stringify({ app: 'n2tango', v: 1, at: new Date().toISOString(), progress: P, daily: D });
+  const box = $('#import-box'), ta = $('#io-text');
+  ta.value = data; box.hidden = false; $('#btn-import').hidden = true;
+  const done = () => toast('진도를 복사했어요. 메모 앱 등에 붙여넣어 보관하세요.');
+  const fail = () => { ta.focus(); ta.select(); toast('아래 글자를 길게 눌러 복사해 주세요.'); };
+  try { navigator.clipboard.writeText(data).then(done, fail); } catch (err) { fail(); }
+});
+$('#btn-import-open').addEventListener('click', () => {
+  $('#import-box').hidden = false; $('#btn-import').hidden = false;
+  const ta = $('#io-text'); ta.value = ''; ta.placeholder = '복사해 둔 진도를 여기에 붙여넣으세요'; ta.focus();
+});
+$('#btn-import').addEventListener('click', () => {
+  let data;
+  try { data = JSON.parse($('#io-text').value); } catch (e) { toast('진도 형식이 아니에요. 복사한 글자 전체를 붙여넣어 주세요.'); return; }
+  if (!data || data.app !== 'n2tango' || typeof data.progress !== 'object') { toast('N2 단어장 진도가 아니에요.'); return; }
+  const keys = new Set(WORDS.map(w => w.k)), clean = {};
+  for (const [k, e] of Object.entries(data.progress)) {
+    if (!keys.has(k) || !e || typeof e !== 'object') continue;
+    const s = Math.max(0, Math.min(INTERVALS.length - 1, e.s | 0));
+    const d = /^\d{4}-\d{2}-\d{2}$/.test(e.d) ? e.d : today();
+    clean[k] = { s, d, w: Math.max(0, e.w | 0), f: /^\d{4}-\d{2}-\d{2}$/.test(e.f) ? e.f : d };
+  }
+  P = clean; saveAll(); queueDirty = true; renderAll();
+  toast(`진도를 복원했어요 (${Object.keys(clean).length}개 단어).`);
+  closeSheet($('#sheet-settings'));
+});
+$('#btn-reset').addEventListener('click', () => { $('#reset-confirm').hidden = false; });
+$('#btn-reset-no').addEventListener('click', () => { $('#reset-confirm').hidden = true; });
+$('#btn-reset-yes').addEventListener('click', () => {
+  P = {}; D = {}; saveAll(); queueDirty = true; renderAll();
+  toast('진도를 초기화했어요.'); closeSheet($('#sheet-settings'));
+});
+$('#btn-install').addEventListener('click', async () => {
+  if (!installEvt) return;
+  installEvt.prompt(); await installEvt.userChoice.catch(() => null);
+  installEvt = null; $('#btn-install').hidden = true;
+});
+
+/* ---------- 탭 ---------- */
+function switchTab(name) {
+  S.tab = name; saveSettings();
+  $$('.tab').forEach(t => t.setAttribute('aria-selected', String(t.dataset.tab === name)));
+  ['study', 'quiz', 'list'].forEach(v => { $('#view-' + v).hidden = v !== name; });
+  if (name === 'study') renderStudy();
+  if (name === 'quiz') { if (Q.items && Q.idx >= Q.items.length) Q = { items: null, scope: Q.scope }; renderQuiz(); }
+  if (name === 'list') renderList();
+  $('#main').scrollTop = 0;
+}
+$$('.tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+function renderAll() { renderStudy(); renderQuiz(); renderList(); }
+
+document.addEventListener('keydown', e => {
+  if (S.tab !== 'study' || $('dialog[open]') || /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+  if ((e.key === ' ' || e.key === 'Enter') && !revealed && queue.length) { e.preventDefault(); revealed = true; renderStudy(); }
+  else if (revealed && e.key === 'ArrowLeft') answer(false);
+  else if (revealed && e.key === 'ArrowRight') answer(true);
+});
+document.addEventListener('visibilitychange', () => {   // 자정을 넘겨 다시 열면 새 날 카드로
+  if (document.visibilityState === 'visible' && D.date && D.date !== today()) { queueDirty = true; if (S.tab === 'study') renderStudy(); }
+});
+
+renderAll();
+switchTab(['study', 'quiz', 'list'].includes(S.tab) ? S.tab : 'study');
+
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
+</script>
+</body>
+</html>
