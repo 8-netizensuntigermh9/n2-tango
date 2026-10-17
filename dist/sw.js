@@ -1,5 +1,5 @@
 // N2 단어장 서비스 워커 — 앱 파일을 저장해 두고 오프라인에서도 열리게 한다.
-const CACHE = 'n2tango-261017-1e3fea6';
+const CACHE = 'n2tango-261017-40e4187';
 const FONTS = 'n2tango-fonts-2';   // 2: 글꼴 CSS를 CORS로 받는다(옛 불투명 저장본은 activate에서 지운다)
 const SHELL = ['./index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 const NAV_WAIT = 3000;   // 페이지를 이만큼 기다려도 안 오면 저장본을 보여 준다
@@ -53,7 +53,7 @@ self.addEventListener('fetch', e => {
       if (res.ok) { const copy = res.clone(); saving = caches.open(FONTS).then(c => c.put(req, copy)); }
       return res;
     });
-    e.waitUntil(net.then(() => saving, () => {}));
+    e.waitUntil(net.then(() => saving).catch(() => {}));
     e.respondWith(caches.open(FONTS).then(c => c.match(req)).then(hit => hit || net));
   }
 });

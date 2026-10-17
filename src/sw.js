@@ -53,7 +53,7 @@ self.addEventListener('fetch', e => {
       if (res.ok) { const copy = res.clone(); saving = caches.open(FONTS).then(c => c.put(req, copy)); }
       return res;
     });
-    e.waitUntil(net.then(() => saving, () => {}));
+    e.waitUntil(net.then(() => saving).catch(() => {}));
     e.respondWith(caches.open(FONTS).then(c => c.match(req)).then(hit => hit || net));
   }
 });

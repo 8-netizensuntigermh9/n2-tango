@@ -234,6 +234,7 @@ mark { background: var(--mark); color: var(--mark-ink); border-radius: 3px; padd
   border: 0; border-bottom: 1px solid var(--line); background: transparent; text-align: left; cursor: pointer;
 }
 .rows li:last-child .row { border-bottom: 0; }
+.row:focus-visible { outline-offset: -3px; }   /* .rows의 overflow:hidden에 잘리지 않게 안쪽에 */
 .row:active { background: var(--surface-2); }
 .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--line); }
 .dot.learning { background: var(--ai); }
