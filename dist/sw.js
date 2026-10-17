@@ -1,5 +1,5 @@
 // N2 단어장 서비스 워커 — 앱 파일을 저장해 두고 오프라인에서도 열리게 한다.
-const CACHE = 'n2tango-261017-6719ad4';
+const CACHE = 'n2tango-261017-1e3fea6';
 const FONTS = 'n2tango-fonts-2';   // 2: 글꼴 CSS를 CORS로 받는다(옛 불투명 저장본은 activate에서 지운다)
 const SHELL = ['./index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 const NAV_WAIT = 3000;   // 페이지를 이만큼 기다려도 안 오면 저장본을 보여 준다
@@ -25,7 +25,8 @@ self.addEventListener('fetch', e => {
   if (url.origin === location.origin) {
     if (req.mode === 'navigate') {             // 페이지: 새 버전 먼저, 늦거나 오프라인이면 저장본
       let saving = Promise.resolve();
-      const net = fetch(req).then(res => {
+      // HTTP 캐시(Pages max-age 600초)를 거치지 않고 서버에 새 버전을 묻는다. 리다이렉트는 브라우저에 그대로 넘긴다
+      const net = fetch(req.url, { cache: 'no-cache', redirect: 'manual' }).then(res => {
         if (res.ok && (res.headers.get('content-type') || '').startsWith('text/html')) {
           const copy = res.clone();
           saving = caches.open(CACHE).then(c => c.put('./index.html', copy));
@@ -47,9 +48,12 @@ self.addEventListener('fetch', e => {
   }
 
   if (url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com') {   // 글꼴: 저장본 먼저, 뒤에서 갱신
-    e.respondWith(caches.open(FONTS).then(c => c.match(req).then(hit => {
-      const net = fetch(req).then(res => { if (res.ok) c.put(req, res.clone()); return res; }).catch(() => hit);
-      return hit || net;
-    })));
+    let saving = Promise.resolve();
+    const net = fetch(req).then(res => {
+      if (res.ok) { const copy = res.clone(); saving = caches.open(FONTS).then(c => c.put(req, copy)); }
+      return res;
+    });
+    e.waitUntil(net.then(() => saving, () => {}));
+    e.respondWith(caches.open(FONTS).then(c => c.match(req)).then(hit => hit || net));
   }
 });

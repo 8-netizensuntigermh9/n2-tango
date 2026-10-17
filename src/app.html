@@ -229,8 +229,11 @@ mark { background: var(--mark); color: var(--mark-ink); border-radius: 3px; padd
 .chips button[aria-pressed="true"] { background: var(--ai); border-color: var(--ai); color: var(--ai-ink); }
 .count { font-size: 13px; color: var(--muted); padding-inline: 2px; }
 .rows { list-style: none; margin: 0; padding: 0; background: var(--surface); border-radius: var(--r); box-shadow: var(--shadow); overflow: hidden; }
-.row { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; padding: 11px 14px; border-bottom: 1px solid var(--line); cursor: pointer; }
-.row:last-child { border-bottom: 0; }
+.row {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; padding: 11px 14px; width: 100%;
+  border: 0; border-bottom: 1px solid var(--line); background: transparent; text-align: left; cursor: pointer;
+}
+.rows li:last-child .row { border-bottom: 0; }
 .row:active { background: var(--surface-2); }
 .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--line); }
 .dot.learning { background: var(--ai); }
@@ -569,7 +572,7 @@ function undoAnswer() {
 }
 
 function renderStudy() {
-  if (queueDirty || queueDay !== today()) buildQueue();
+  if (queueDirty || (queueDay !== today() && !revealed)) buildQueue();   // 뒷면을 보는 중이면 답한 뒤 새 날 목록으로
   const view = $('#view-study'), d = daily();
   const master = WORDS.filter(w => status(w) === 'master').length;
   const seen = WORDS.filter(w => prog(w)).length;
@@ -771,7 +774,7 @@ $('#view-quiz').addEventListener('click', e => {
   const act = el.dataset.act;
   if (act === 'mode') { S.quizMode = el.dataset.v; saveSettings(); renderQuiz(); }
   else if (act === 'scope') { Q.scope = el.dataset.v; renderQuiz(); }
-  else if (act === 'start') startQuiz();
+  else if (act === 'start') { startQuiz(); e.currentTarget.scrollTop = 0; }
   else if (act === 'setup') { Q = { items: null, scope: Q.scope }; renderQuiz(); }
   else if (act === 'pick') {
     const it = Q.items[Q.idx]; if (it.pick != null) return;
@@ -782,7 +785,7 @@ $('#view-quiz').addEventListener('click', e => {
     const a = WORDS[it.id];
     $('#sr').textContent = it.pick === it.id ? '정답이에요' : `틀렸어요. 정답은 ${Q.mode === 'meaning' ? a.m : Q.mode === 'reading' ? a.r : a.w}`;
   }
-  else if (act === 'next') { Q.idx++; renderQuiz(); }
+  else if (act === 'next') { Q.idx++; renderQuiz(); e.currentTarget.scrollTop = 0; }   // 낮은 화면에서 내려 둔 위치를 새 문제에 남기지 않는다
   else if (act === 'detail') openDetail(+el.dataset.id);
   else if (act === 'go-study') switchTab('study');
   else if (act === 'row') openDetail(+el.dataset.id);
@@ -792,10 +795,10 @@ $('#view-quiz').addEventListener('click', e => {
 const L = { q: '', f: 'all', limit: 120 };
 function rowHtml(w) {
   const st = isHard(w) ? 'hard' : status(w);
-  return `<li class="row" data-act="row" data-id="${w.id}" role="button" tabindex="0">
+  return `<li><button class="row" data-act="row" data-id="${w.id}">
     <span class="dot ${st}" aria-hidden="true"></span>
     <span class="jw" lang="ja">${esc(w.w)}<small>${w.r !== w.w ? esc(w.r) : POS[w.p]}</small></span>
-    <span class="m">${esc(w.m)}</span></li>`;
+    <span class="m">${esc(w.m)}</span></button></li>`;
 }
 function listMatches() {
   const q = L.q.trim().toLowerCase(), qh = toHira(q);
@@ -818,9 +821,6 @@ $('#q').addEventListener('input', e => { clearTimeout(searchTimer); searchTimer 
 $('#filters').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; L.f = b.dataset.f; relist(); });
 $('#btn-more').addEventListener('click', () => { L.limit += 120; renderList(); });
 $('#rows').addEventListener('click', e => { const r = e.target.closest('[data-act="row"]'); if (r) openDetail(+r.dataset.id); });
-document.addEventListener('keydown', e => {
-  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('.row')) { e.preventDefault(); openDetail(+e.target.dataset.id); }
-});
 
 /* ---------- 시트 ---------- */
 function shut(d) {   // 시트 안에 띄운 안내는 본문으로 옮겨, 시트가 닫혀도 보이게 한다
@@ -1145,6 +1145,7 @@ function switchTab(name) {
   if (name === 'study') renderStudy();
   if (name === 'quiz') { if (Q.items && Q.idx >= Q.items.length) Q = { items: null, scope: Q.scope }; renderQuiz(); }
   if (name === 'list') renderList();
+  $('#view-' + name).scrollTop = 0;
 }
 $$('.tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
 function renderAll() { renderStudy(); renderQuiz(); renderList(); }
