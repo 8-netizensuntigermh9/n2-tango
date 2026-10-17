@@ -26,10 +26,15 @@ def main():
         sys.exit(f"데이터 오류 {len(errors)}건 — 빌드 중단")
 
     vocab = [[r["w"], r["r"], r["p"], r["m"], r["ex"], r["ko"]] for r in rows]
-    vocab_json = json.dumps(vocab, ensure_ascii=False, separators=(",", ":"))
+    # <script> 안에 넣으므로 "</script>" 가 생기지 않게 < 를 이스케이프한다
+    vocab_json = json.dumps(vocab, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
     app = (SRC / "app.html").read_text(encoding="utf-8")
     sw = (SRC / "sw.js").read_text(encoding="utf-8")
-    digest = hashlib.sha1((vocab_json + app + sw).encode("utf-8")).hexdigest()[:7]
+    h = hashlib.sha1((vocab_json + app + sw).encode("utf-8"))
+    for name in ("manifest.webmanifest", "icon-192.png", "icon-512.png"):
+        if (SRC / name).exists():
+            h.update((SRC / name).read_bytes())
+    digest = h.hexdigest()[:7]
     version = f"{date.today():%y%m%d}-{digest}"
 
     marker = "/*__VOCAB__*/[]"
