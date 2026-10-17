@@ -37,7 +37,7 @@ self.addEventListener('fetch', e => {
       const late = new Promise(r => setTimeout(r, NAV_WAIT)).then(saved);
       e.respondWith(
         Promise.race([net, late])
-          .then(res => !res ? net : res.ok ? res : saved().then(hit => hit || res))
+          .then(res => !res ? net : res.ok || res.type === 'opaqueredirect' ? res : saved().then(hit => hit || res))
           .catch(() => saved().then(hit => hit || Response.error()))
       );
       return;

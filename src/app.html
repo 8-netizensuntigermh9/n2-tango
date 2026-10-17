@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <title>N2 단어장</title>
 <meta name="description" content="JLPT N2 핵심 단어를 예문과 함께 외우는 휴대폰용 단어장">
 <meta name="theme-color" content="#27358a" media="(prefers-color-scheme: light)">
@@ -10,9 +10,10 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="N2 단어장">
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" crossorigin>
 <style>
@@ -42,16 +43,17 @@
 html, body { height: 100%; margin: 0; overflow: hidden; overscroll-behavior: none; }
 body {
   background: var(--bg); color: var(--ink); font-family: var(--font-ui); font-size: 16px; line-height: 1.55;
-  -webkit-tap-highlight-color: transparent; overscroll-behavior-y: none;
+  -webkit-tap-highlight-color: transparent;
 }
 button, input, select, textarea { font: inherit; color: inherit; }
 button { cursor: pointer; }
 a { color: var(--ai); }
 :focus-visible { outline: 3px solid var(--ai); outline-offset: 2px; }
 [hidden] { display: none !important; }
+.sr-only { position: fixed; top: 0; left: 0; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 /* 한 화면 고정: 페이지는 스크롤하지 않고, 넘치는 경우에만 카드·해설·목록 안에서 스크롤한다 */
 .app { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; height: 100%; height: 100dvh; overflow: hidden; }
-.scroll { overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.scroll { overflow-y: auto; overscroll-behavior: contain; }
 
 /* 머리줄 */
 .top {
@@ -76,6 +78,7 @@ main { overflow: hidden; min-height: 0; }
 .view {
   max-width: 560px; height: 100%; margin: 0 auto; padding-inline: 16px; padding-block: 4px clamp(8px, calc(var(--u) * 1.6), 14px);
   display: flex; flex-direction: column; min-height: 0;
+  overflow-y: auto; overscroll-behavior: contain;   /* 마지막 수단: 아주 낮은 화면(가로 등) */
 }
 .view > .panel { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
 
@@ -111,7 +114,7 @@ main { overflow: hidden; min-height: 0; }
 .card {
   background: var(--surface); border-radius: var(--r); box-shadow: var(--shadow);
   padding: clamp(6px, var(--u), 12px) 16px clamp(10px, calc(var(--u) * 2), 18px);
-  flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; position: relative;
+  flex: 1 1 auto; min-height: 140px; display: flex; flex-direction: column; position: relative;
 }
 .card-top { display: flex; align-items: center; gap: 6px; min-height: 44px; flex: none; }
 .chip {
@@ -174,7 +177,7 @@ mark { background: var(--mark); color: var(--mark-ink); border-radius: 3px; padd
 .q-head { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 14px; margin: 0 2px clamp(4px, calc(var(--u) * .8), 10px); font-variant-numeric: tabular-nums; flex: none; }
 .q-card {
   background: var(--surface); border-radius: var(--r); box-shadow: var(--shadow); padding: clamp(10px, calc(var(--u) * 2.4), 22px) 16px;
-  text-align: center; display: grid; gap: 4px; align-content: center; flex: 1 1 auto; min-height: 0;
+  text-align: center; display: grid; gap: 4px; align-content: center; flex: 1 1 auto;
 }
 .q-card .word { font-size: clamp(34px, min(12vw, calc(var(--u) * 8)), 52px); }
 .q-card .q-text { font-size: clamp(18px, calc(var(--u) * 3), 22px); font-weight: 700; margin: 0; }
@@ -196,7 +199,7 @@ mark { background: var(--mark); color: var(--mark-ink); border-radius: 3px; padd
 .opt .mk { margin-left: auto; font-size: 14px; font-weight: 700; }
 .explain {
   margin-top: clamp(6px, calc(var(--u) * 1.2), 12px); background: var(--surface); border-radius: 14px; padding: 8px 14px;
-  display: grid; gap: 2px; align-content: start; box-shadow: var(--shadow); flex: 1 1 auto; min-height: 0; position: relative;
+  display: grid; gap: 2px; align-content: start; box-shadow: var(--shadow); flex: 1 1 auto; min-height: 4.5em; position: relative;
 }
 .explain .jw { font-family: var(--font-jp); font-size: 18px; font-weight: 600; padding-right: 88px; }
 .explain .jw small { font-size: 14px; color: var(--muted); margin-left: 6px; font-weight: 400; }
@@ -278,7 +281,7 @@ dialog.sheet[open] { display: flex; flex-direction: column; animation: up .22s e
 .spinner { width: 18px; height: 18px; border-radius: 50%; border: 2.5px solid var(--ai-soft); border-top-color: var(--ai); animation: spin .8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .loading { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; padding: 6px 2px; }
-textarea { width: 100%; min-height: 110px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--surface-2); padding: 10px 12px; font-size: 13px; font-family: ui-monospace, Menlo, Consolas, monospace; resize: vertical; }
+textarea { width: 100%; min-height: 110px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--surface-2); padding: 10px 12px; font-size: 16px; font-family: ui-monospace, Menlo, Consolas, monospace; resize: vertical; }
 .set-group { display: grid; gap: 8px; }
 .set-group + .set-group { border-top: 1px solid var(--line); padding-top: 16px; }
 .toggle { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; }
@@ -432,6 +435,7 @@ textarea { width: 100%; min-height: 110px; border-radius: 12px; border: 1.5px so
 </dialog>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="sr-only" id="sr" role="status" aria-live="polite"></div>
 
 <script>
 'use strict';
@@ -463,7 +467,9 @@ function toHira(s) { return s.replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.c
 
 let toastTimer;
 function toast(msg) {
-  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  const t = $('#toast'), host = $('dialog[open]') || document.body;   // 시트는 맨 위 층이라 그 안에 띄워야 보인다
+  if (t.parentElement !== host) host.append(t);
+  t.textContent = msg; t.classList.add('show');
   clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
 }
 
@@ -749,7 +755,7 @@ function renderQuiz() {
     <div class="q-card">${qBody}</div>
     <div class="options">${opts}</div>
     ${picked ? `
-      <div class="explain scroll" role="status">
+      <div class="explain scroll">
         <p class="verdict ${it.pick === it.id ? 'ok' : 'ng'}">${it.pick === it.id ? '정답이에요' : '틀렸어요'}</p>
         <div class="jw" lang="ja">${esc(w.w)}<small>${w.r !== w.w ? esc(w.r) : ''}</small></div>
         <div>${esc(w.m)}</div>
@@ -773,6 +779,8 @@ $('#view-quiz').addEventListener('click', e => {
     if (it.pick === it.id) Q.score++;
     else { Q.wrong.push(it.id); setForgot(WORDS[it.id]); saveAll(); buildQueue(); updateBadge(); }
     renderQuiz();
+    const a = WORDS[it.id];
+    $('#sr').textContent = it.pick === it.id ? '정답이에요' : `틀렸어요. 정답은 ${Q.mode === 'meaning' ? a.m : Q.mode === 'reading' ? a.r : a.w}`;
   }
   else if (act === 'next') { Q.idx++; renderQuiz(); }
   else if (act === 'detail') openDetail(+el.dataset.id);
@@ -815,17 +823,21 @@ document.addEventListener('keydown', e => {
 });
 
 /* ---------- 시트 ---------- */
+function shut(d) {   // 시트 안에 띄운 안내는 본문으로 옮겨, 시트가 닫혀도 보이게 한다
+  const t = $('#toast'); if (t.parentElement === d) document.body.append(t);
+  d.close();
+}
 function openSheet(dlg) {
   if (dlg.open) return;
-  $$('dialog[open]').forEach(x => x.close());
+  $$('dialog[open]').forEach(shut);
   dlg.showModal();
   history.pushState({ sheet: dlg.id }, '');
 }
 function closeSheet(dlg) {
   if (!dlg.open) return;
-  if (history.state && history.state.sheet === dlg.id) history.back(); else dlg.close();
+  if (history.state && history.state.sheet === dlg.id) history.back(); else shut(dlg);
 }
-window.addEventListener('popstate', () => $$('dialog[open]').forEach(d => d.close()));
+window.addEventListener('popstate', () => $$('dialog[open]').forEach(shut));
 $$('dialog.sheet').forEach(dlg => {
   dlg.addEventListener('cancel', e => { e.preventDefault(); closeSheet(dlg); });
   dlg.addEventListener('click', e => {
@@ -1138,7 +1150,9 @@ $$('.tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.ta
 function renderAll() { renderStudy(); renderQuiz(); renderList(); }
 
 document.addEventListener('keydown', e => {
-  if (S.tab !== 'study' || $('dialog[open]') || (e.target.closest && e.target.closest('input,textarea,select,button,a,[tabindex]'))) return;
+  if (S.tab !== 'study' || $('dialog[open]') || !e.target.closest) return;
+  if (e.target.closest('input,textarea,select')) return;
+  if ((e.key === ' ' || e.key === 'Enter') && e.target.closest('button,a,[tabindex]')) return;   // 포커스된 버튼 자신의 동작을 따른다
   if ((e.key === ' ' || e.key === 'Enter') && !revealed && queue.length) { e.preventDefault(); revealed = true; renderStudy(); }
   else if (revealed && e.key === 'ArrowLeft') answer(false);
   else if (revealed && e.key === 'ArrowRight') answer(true);
