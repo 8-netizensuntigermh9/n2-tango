@@ -15,7 +15,7 @@
 <meta name="apple-mobile-web-app-title" content="N2 단어장">
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@500&family=Klee+One:wght@400;600&display=swap" crossorigin>
 <style>
 /* Layout: 한 손 사용 — 얇은 머리줄, 가운데 스크롤 영역, 엄지가 닿는 하단 탭바와 큰 버튼 */
 :root {
@@ -24,6 +24,7 @@
   --ok: #24704b; --ok-soft: #dff1e7; --ng: #b92c43; --ng-soft: #fbe4e8; --mark: #fff0b3; --mark-ink: #1a1f3b;
   --shadow: 0 1px 2px rgba(20, 26, 60, .06), 0 8px 24px rgba(20, 26, 60, .07);
   --font-jp: "Klee One", "Hiragino Maru Gothic ProN", "Yu Gothic", "Noto Sans JP", "Noto Sans CJK JP", sans-serif;
+  --font-head: "IBM Plex Sans JP", "Hiragino Sans", "Yu Gothic", "Noto Sans JP", "Noto Sans CJK JP", sans-serif;   /* 표제어 */
   --font-ui: system-ui, -apple-system, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
   --r: 18px;
   --u: 1vh;   /* 보이는 화면 높이의 1% — 글자·여백을 화면 높이에 맞춰 줄인다 */
@@ -102,21 +103,22 @@ main { overflow: hidden; min-height: 0; }
   background: var(--ng); color: var(--surface); font-size: 11px; line-height: 18px; font-variant-numeric: tabular-nums;
 }
 
-/* 진도 줄 */
-.stats { display: grid; gap: 4px; padding: 4px 2px clamp(8px, calc(var(--u) * 1.6), 14px); }
-.stats-row { display: flex; align-items: baseline; gap: 6px; font-size: 14px; color: var(--muted); }
-.stats-row b { color: var(--ink); font-size: 18px; font-variant-numeric: tabular-nums; }
-.stats-row .push { margin-left: auto; }
+/* 진도 줄: 외운 수 · 남은 카드 · 되돌리기를 한 줄에 */
+.stats { display: flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 2px; font-size: 13.5px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; flex: none; }
+.stats b { color: var(--ink); font-size: 15.5px; }
+.stats-more { min-width: 0; overflow: hidden; text-overflow: ellipsis; }   /* 좁으면 뒤의 복습·새 단어 내역부터 줄임표 */
+.stats .icon-btn { width: 40px; height: 40px; margin-left: auto; color: var(--ai); }
 .meter { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
 .meter i { display: block; height: 100%; background: var(--ai); border-radius: 3px; transition: width .3s; }
+.stats + .meter { height: 4px; margin: 0 2px clamp(6px, var(--u), 10px); flex: none; }
 
 /* 단어 카드 */
 .card {
   background: var(--surface); border-radius: var(--r); box-shadow: var(--shadow);
-  padding: clamp(6px, var(--u), 12px) 16px clamp(10px, calc(var(--u) * 2), 18px);
-  flex: 1 1 auto; min-height: 140px; display: flex; flex-direction: column; position: relative;
+  padding: clamp(4px, calc(var(--u) * .8), 10px) 14px clamp(10px, calc(var(--u) * 1.6), 16px);
+  flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; position: relative;
 }
-.card-top { display: flex; align-items: center; gap: 6px; min-height: 44px; flex: none; }
+.card-top { display: flex; align-items: center; gap: 6px; min-height: 40px; flex: none; }
 .chip {
   display: inline-flex; align-items: center; height: 24px; padding: 0 9px; border-radius: 12px;
   font-size: 12px; font-weight: 600; background: var(--surface-2); color: var(--muted); border: 1px solid var(--line);
@@ -124,24 +126,44 @@ main { overflow: hidden; min-height: 0; }
 .chip.new { background: var(--ai-soft); color: var(--ai); border-color: transparent; }
 .chip.hard { background: var(--ng-soft); color: var(--ng); border-color: transparent; }
 .chip.done { background: var(--ok-soft); color: var(--ok); border-color: transparent; }
-.card-top .icon-btn { margin-left: auto; color: var(--ai); }
-.face { flex: 1 0 auto; display: grid; place-content: center; text-align: center; padding: clamp(4px, var(--u), 14px) 0 4px; cursor: pointer; }
+.card-top .icon-btn { color: var(--ai); }
+.card-top .chip + .icon-btn { margin-left: auto; }
+.chip.kichul { background: var(--mark); color: var(--mark-ink); border-color: transparent; }
+.face { flex: 1 0 auto; display: grid; align-content: center; justify-items: center; text-align: center; gap: 2px; padding: 0 0 clamp(6px, var(--u), 12px); }
 .reading { font-size: clamp(14px, calc(var(--u) * 2.3), 17px); color: var(--muted); letter-spacing: .06em; min-height: 1.5em; font-family: var(--font-jp); }
-.word { font-family: var(--font-jp); font-weight: 600; font-size: clamp(34px, min(13vw, calc(var(--u) * 8.5)), 60px); line-height: 1.2; letter-spacing: .02em; word-break: keep-all; }
-.card.open .word { font-size: clamp(30px, min(11vw, calc(var(--u) * 6.2)), 52px); }
-.hint { text-align: center; color: var(--muted); font-size: 13px; margin: 6px 0 0; }
-.back { border-top: 1px dashed var(--line); margin-top: clamp(4px, var(--u), 12px); padding-top: clamp(6px, calc(var(--u) * 1.4), 14px); display: grid; gap: clamp(6px, var(--u), 10px); }
-.meaning { font-size: clamp(17px, calc(var(--u) * 2.9), 21px); font-weight: 700; text-align: center; margin: 0; }
-.ex { background: var(--surface-2); border-radius: 12px; padding: clamp(6px, calc(var(--u) * 1.2), 12px) 10px clamp(6px, calc(var(--u) * 1.2), 12px) 14px; display: grid; grid-template-columns: 1fr auto; gap: 2px 6px; align-items: start; }
-.ex .ja { font-family: var(--font-jp); font-size: clamp(15px, calc(var(--u) * 2.5), 18px); line-height: 1.55; margin: 0; min-width: 0; }
-.ex .ko { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: clamp(13px, calc(var(--u) * 2), 14.5px); }
+.word { font-family: var(--font-head); font-weight: 500; font-size: clamp(30px, min(11vw, calc(var(--u) * 6.2)), 52px); line-height: 1.2; letter-spacing: .02em; word-break: keep-all; }
+.meaning { font-size: clamp(16px, calc(var(--u) * 2.6), 19px); font-weight: 700; text-align: center; margin: 2px 0 0; line-height: 1.4; }
+/* 긴 표제어(コミュニケーション 등)는 카드 폭에 맞춰 글자를 줄인다(--len = 글자 수) */
+.card .word { font-size: min(clamp(30px, min(11vw, calc(var(--u) * 6.2)), 52px), calc((min(100vw, 560px) - 76px) / var(--len, 1))); }
+/* 뜻은 두 줄까지만(긴 뜻 전체는 ✦ 상세 시트) */
+.card .meaning { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+.ex { background: var(--surface-2); border-radius: 12px; padding: clamp(4px, var(--u), 10px) 6px clamp(6px, var(--u), 10px) 14px; display: grid; grid-template-columns: 1fr auto; gap: 2px 6px; align-items: start; }
+.ex .ja { font-family: var(--font-jp); font-size: clamp(15px, calc(var(--u) * 2.5), 18px); line-height: 2.1; margin: 0; min-width: 0; }
+.ex .ko { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: clamp(13px, calc(var(--u) * 2), 14.5px); line-height: 1.45; }
 .ex .icon-btn { width: 40px; height: 40px; color: var(--ai); }
+/* 일본어 예문: 글꼴의 비례 폭(palt)으로 가나·문장부호 사이 빈칸을 줄인다 */
+.ex .ja, .explain .ja, .ai-card .ja { font-feature-settings: "palt"; }
+rt { font-size: .5em; color: var(--muted); letter-spacing: 0; }
 mark { background: var(--mark); color: var(--mark-ink); border-radius: 3px; padding: 0 1px; }
+mark rt { color: var(--mark-ink); }
+/* 학습 카드 토글: 자리는 늘 잡아 두고 보이기만 바꾼다(표제어·예문 위치 고정) */
+.card.study .reading, .card.study .meaning, .card.study .ex .ko, .card.study rt { visibility: hidden; }
+.card.study.kana-on .reading, .card.study.kana-on rt, .card.study.mean-on .meaning, .card.study.mean-on .ex .ko { visibility: visible; }
 .link { border: 0; background: none; color: var(--ai); font-weight: 600; font-size: 14.5px; padding: 8px 4px; }
-.back .link { justify-self: center; display: inline-flex; align-items: center; gap: 6px; padding-block: 4px; }
-.back .link svg { width: 18px; height: 18px; }
+
+.toggles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: clamp(6px, calc(var(--u) * 1.2), 12px); flex: none; }
+.tg {
+  min-height: clamp(40px, calc(var(--u) * 6.2), 48px); border-radius: 13px; border: 1.5px solid var(--line); background: var(--surface);
+  color: var(--muted); font-size: 15px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+}
+.tg svg { width: 19px; height: 19px; }
+.tg .tg-kana { font-family: var(--font-jp); font-size: 17px; font-weight: 600; }
+.tg[aria-pressed="true"] { background: var(--ai-soft); border-color: var(--ai); color: var(--ai); }
+.btn.ans { min-height: clamp(44px, calc(var(--u) * 6.8), 52px); font-size: 17px; }
+.flashing .btn.ans, .flashing .tg { pointer-events: none; }
 
 .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: clamp(8px, calc(var(--u) * 1.6), 14px); flex: none; }
+.toggles + .actions { margin-top: clamp(6px, var(--u), 10px); }
 .actions.one { grid-template-columns: 1fr; }
 .btn {
   border: 1px solid transparent; border-radius: 14px; min-height: 52px; padding: 0 16px; font-weight: 700; font-size: 16px;
@@ -155,9 +177,6 @@ mark { background: var(--mark); color: var(--mark-ink); border-radius: 3px; padd
 .btn.small { min-height: 40px; font-size: 14.5px; padding: 0 12px; border-radius: 11px; }
 .btn:disabled { opacity: .5; cursor: default; }
 .btn:active:not(:disabled) { transform: translateY(1px); }
-.sub { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 14px; margin-top: 4px; padding-inline: 2px; min-height: 30px; flex: none; }
-.sub .link { padding-block: 4px; }
-.sub b { color: var(--ink); font-variant-numeric: tabular-nums; }
 
 /* 완료·안내 블록 */
 .panel { background: var(--surface); border-radius: var(--r); box-shadow: var(--shadow); padding: 22px 18px; display: grid; gap: 14px; }
@@ -381,7 +400,9 @@ textarea { width: 100%; min-height: 110px; border-radius: 12px; border: 1.5px so
       <div class="seg" id="set-new" role="group" aria-label="하루 새 단어 수">
         <button data-v="10">10</button><button data-v="20">20</button><button data-v="30">30</button><button data-v="50">50</button>
       </div>
-      <label class="toggle"><span>카드 앞면에 읽기 함께 보기</span><input type="checkbox" id="set-reading"></label>
+      <label class="toggle"><span>히라가나 처음부터 켜 두기</span><input type="checkbox" id="set-reading"></label>
+      <label class="toggle"><span>다음 카드에서도 버튼 상태 유지</span><input type="checkbox" id="set-keep"></label>
+      <label class="toggle"><span>뜻 안 보고 알아요 누르면 뜻 잠깐 보여 주기</span><input type="checkbox" id="set-flash"></label>
       <p class="field-label">발음 속도</p>
       <div class="seg" id="set-rate" role="group" aria-label="발음 속도">
         <button data-v="0.7">천천히</button><button data-v="0.9">보통</button><button data-v="1.1">빠르게</button>
@@ -450,7 +471,11 @@ const POS = { n: '명사', vs: 'する동사', v: '동사', i: 'い형용사', n
 const INTERVALS = [0, 1, 2, 4, 7, 15, 30];   // 단계별 다음 복습까지 날짜 수
 const MASTER = 5;                             // 이 단계 이상이면 "외움"
 const MODELS = ['gemini-3.8-flash', 'gemini-3.6-flash', 'gemini-3.5-flash-lite', 'gemini-3.1-flash-lite', 'gemini-2.5-flash'];
-const WORDS = VOCAB.map((t, id) => ({ id, w: t[0], r: t[1], p: t[2], m: t[3], ex: t[4], ko: t[5], k: t[0] + '|' + t[1] }));
+// 예문은 루비 표기 その件{けん}はもう済{す}みです — {} 앞의 연속 한자 덩어리에 읽기 (tools/validate.py 와 같은 규칙)
+const RUBY = /([㐀-䶿一-鿿豈-﫿々〆ヶ]+)\{([^{}]*)\}/g;
+const plain = raw => raw.replace(RUBY, '$1');
+// exr = 루비 원문(rubyHtml 전용), ex = 벗긴 문장(발음·AI·검색), kc = 기출 단어
+const WORDS = VOCAB.map((t, id) => ({ id, w: t[0], r: t[1], p: t[2], m: t[3], exr: t[4], ex: plain(t[4]), ko: t[5], kc: !!t[6], k: t[0] + '|' + t[1] }));
 
 /* ---------- 공통 ---------- */
 const $ = (s, el = document) => el.querySelector(s);
@@ -480,11 +505,13 @@ function toast(msg) {
 const ICON = {
   speak: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z" fill="currentColor" fill-opacity=".15"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>',
   spark: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3.5c.6 4.2 2.3 5.9 6.5 6.5-4.2.6-5.9 2.3-6.5 6.5-.6-4.2-2.3-5.9-6.5-6.5 4.2-.6 5.9-2.3 6.5-6.5z" fill="currentColor" fill-opacity=".15"/><path d="M18.5 16v4M16.5 18h4"/></svg>',
+  bulb: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17.5h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z" fill="currentColor" fill-opacity=".15"/></svg>',
+  undo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>',
 };
 
 /* ---------- 상태 ---------- */
 let P = store.get('progress', {});            // 단어키 → {s: 단계, d: 다음 복습일, w: 틀린 횟수, f: 처음 본 날}
-const S = Object.assign({ newPerDay: 20, showReading: false, rate: 0.9, apiKey: '', model: 'auto', quizMode: 'meaning', tab: 'study' }, store.get('settings', {}));
+const S = Object.assign({ newPerDay: 20, showReading: false, keepToggles: false, flashOnKnow: true, rate: 0.9, apiKey: '', model: 'auto', quizMode: 'meaning', tab: 'study' }, store.get('settings', {}));
 let D = store.get('daily', {});               // 오늘 기록 {date, newDone, answered, bonus}
 const prog = w => P[w.k];
 function daily() { if (D.date !== today()) D = { date: today(), newDone: 0, answered: 0, bonus: 0 }; return D; }
@@ -517,20 +544,52 @@ function speak(text) {
   speechSynthesis.speak(u);
 }
 
-/* ---------- 예문 강조 ---------- */
-function highlight(w, text = w.ex) {
-  const ex = esc(text);
-  const keys = [w.w, (w.p === 'v' || w.p === 'i') ? w.w.slice(0, -1) : '', w.r].filter(Boolean);
-  for (const k of keys) {
-    const ek = esc(k), i = ex.indexOf(ek);
-    if (i >= 0) return ex.slice(0, i) + '<mark>' + ek + '</mark>' + ex.slice(i + ek.length);
+/* ---------- 예문 (루비 + 강조) ---------- */
+function rubyTokens(raw) {   // [{base, rt?}] — 중괄호 없는 문장도 받는다(AI 예문)
+  const out = [];
+  let i = 0;
+  for (const m of raw.matchAll(RUBY)) {
+    if (m.index > i) out.push({ base: raw.slice(i, m.index) });
+    out.push({ base: m[1], rt: m[2] });
+    i = m.index + m[0].length;
   }
-  return ex;
+  if (i < raw.length) out.push({ base: raw.slice(i) });
+  return out;
+}
+// 표제어(없으면 어간 → 읽기)를 <mark> 로 감싼다. 루비 덩어리 중간에 걸리면 그 덩어리 경계까지 넓힌다. furi=false 면 읽기 없이
+function rubyHtml(raw, w, furi = true) {
+  const toks = rubyTokens(raw), text = toks.map(t => t.base).join('');
+  let a = -1, b = -1;
+  for (const k of [w.w, (w.p === 'v' || w.p === 'i') ? w.w.slice(0, -1) : '', w.r]) {
+    if (k && (a = text.indexOf(k)) >= 0) { b = a + k.length; break; }
+  }
+  let pos = 0;
+  for (const t of toks) {
+    const end = pos + t.base.length;
+    if (t.rt != null && pos < b && end > a) { a = Math.min(a, pos); b = Math.max(b, end); }
+    pos = end;
+  }
+  let html = '';
+  pos = 0;
+  for (const t of toks) {
+    const end = pos + t.base.length;
+    const cuts = t.rt != null ? [pos, end] : [pos, ...[a, b].filter(x => x > pos && x < end), end];
+    for (let i = 0; i < cuts.length - 1; i++) {
+      const s = esc(t.base.slice(cuts[i] - pos, cuts[i + 1] - pos));
+      if (cuts[i] === a) html += '<mark>';
+      html += t.rt != null && furi ? `<ruby>${s}<rt>${esc(t.rt)}</rt></ruby>` : s;
+      if (cuts[i + 1] === b) html += '</mark>';
+    }
+    pos = end;
+  }
+  return html;
 }
 
 /* ---------- 학습 (간격 반복) ---------- */
 const NEW_ORDER = shuffle(WORDS.map(w => w.id), rng(20261015));   // 새 단어는 품사가 섞이도록 고정 순서로
-let queue = [], revealed = false, undo = null, queueDirty = true, queueDay = '';
+let queue = [], undo = null, queueDirty = true, queueDay = '';
+let view = { kana: !!S.showReading, mean: false }, shownId = null;   // 지금 카드의 히라가나·의미 토글
+let flashTimer = 0;                                                   // 「알아요」 뒤 뜻을 잠깐 보여 주는 중
 
 function buildQueue() {
   const t = today(), d = daily();
@@ -543,13 +602,13 @@ function buildQueue() {
     if (due.length) queue.push(due.shift());
     if (fresh.length) queue.push(fresh.shift());
   }
-  revealed = false; undo = null; queueDirty = false; queueDay = t;
+  undo = null; queueDirty = false; queueDay = t;
 }
 
 function answer(known) {
   if (!queue.length) return;
   const id = queue[0], w = WORDS[id], d = daily(), prev = prog(w);
-  undo = { k: w.k, prev: prev ? { ...prev } : null, d: { ...d }, queue: queue.slice() };
+  undo = { k: w.k, prev: prev ? { ...prev } : null, d: { ...d }, queue: queue.slice(), view: { ...view } };
   const e = prev ? { ...prev } : { s: 0, w: 0, f: today() };
   if (!prev) d.newDone++;
   d.answered++;
@@ -562,32 +621,59 @@ function answer(known) {
     queue.splice(Math.min(3, queue.length), 0, id);    // 몇 장 뒤에 다시
   }
   P[w.k] = e; saveAll();
-  revealed = false; renderStudy();
+  renderStudy();
 }
 
 function undoAnswer() {
   if (!undo) return;
   if (undo.prev) P[undo.k] = undo.prev; else delete P[undo.k];
-  D = undo.d; queue = undo.queue; undo = null; revealed = true;
-  saveAll(); renderStudy(); toast('방금 답을 되돌렸어요.');
+  D = undo.d; queue = undo.queue; view = undo.view; shownId = queue[0]; undo = null;
+  saveAll(); renderStudy({ restore: true }); toast('방금 답을 되돌렸어요.');
 }
 
-function renderStudy() {
-  if (queueDirty || (queueDay !== today() && !revealed)) buildQueue();   // 뒷면을 보는 중이면 답한 뒤 새 날 목록으로
-  const view = $('#view-study'), d = daily();
+// 「알아요」: 뜻을 안 켠 채면 뜻·번역을 0.6초 보여 준 뒤 넘긴다(설정 flashOnKnow)
+function know() {
+  if (flashTimer || !queue.length) return;
+  if (!S.flashOnKnow || view.mean) { answer(true); return; }
+  setView('mean', true);
+  $('#view-study').classList.add('flashing');
+  flashTimer = setTimeout(endFlash, 600);
+}
+function endFlash() {   // 시간이 다 되거나 탭 전환·화면 숨김이면 바로 다음 카드로
+  if (!flashTimer) return;
+  clearTimeout(flashTimer); flashTimer = 0;
+  $('#view-study').classList.remove('flashing');
+  view.mean = false;    // 잠깐 켠 뜻은 「버튼 상태 유지」에 남기지 않는다
+  answer(true);
+}
+
+// 토글은 다시 그리지 않고 class·aria-pressed 만 바꾼다(자리는 미리 잡혀 있어 위치가 흔들리지 않는다)
+function setView(key, on) {
+  view[key] = on;
+  const card = $('#view-study .card'), btn = $(`#view-study [data-act="${key}"]`), w = queue.length ? WORDS[queue[0]] : null;
+  if (card) card.classList.toggle(key + '-on', on);
+  if (btn) btn.setAttribute('aria-pressed', String(on));
+  if (w) $('#sr').textContent = key === 'kana' ? (on ? `읽기: ${w.r}` : '읽기 숨김') : (on ? `뜻: ${w.m}` : '뜻 숨김');
+}
+
+function renderStudy({ restore = false } = {}) {
+  // 자정을 넘기면 새 날 목록으로. 되돌린 카드는 그대로 두고 다음 답 뒤에 바꾼다
+  if (queueDirty || (queueDay !== today() && !restore)) buildQueue();
+  const host = $('#view-study'), d = daily();
   const master = WORDS.filter(w => status(w) === 'master').length;
-  const seen = WORDS.filter(w => prog(w)).length;
   const reviewsLeft = queue.filter(id => prog(WORDS[id])).length;
-  const newLeft = queue.length - reviewsLeft;
   let html = `
     <div class="stats">
-      <div class="stats-row"><span>외운 단어</span><b>${master}</b><span>/ ${WORDS.length}</span><span class="push">본 단어 ${seen}</span></div>
-      <div class="meter" aria-hidden="true"><i style="width:${(master / WORDS.length * 100).toFixed(1)}%"></i></div>
-    </div>`;
+      <span>외운 <b>${master}</b>/${WORDS.length}</span>
+      ${queue.length ? `<span class="stats-more">· 남은 <b>${queue.length}</b> (복습 ${reviewsLeft}·새 ${queue.length - reviewsLeft})</span>` : ''}
+      ${undo ? `<button class="icon-btn" data-act="undo" aria-label="방금 답 되돌리기">${ICON.undo}</button>` : ''}
+    </div>
+    <div class="meter" aria-hidden="true"><i style="width:${(master / WORDS.length * 100).toFixed(1)}%"></i></div>`;
   if (!queue.length) {
+    shownId = null;
     const tomorrow = addDays(today(), 1);
     const dueTomorrow = WORDS.filter(w => prog(w) && prog(w).d === tomorrow).length;
-    const remainingNew = WORDS.length - seen;
+    const remainingNew = WORDS.filter(w => !prog(w)).length;
     html += `
       <div class="panel">
         <h2>${d.answered ? '오늘 학습을 마쳤어요' : '오늘은 학습할 카드가 없어요'}</h2>
@@ -603,42 +689,42 @@ function renderStudy() {
       </div>`;
   } else {
     const w = WORDS[queue[0]], e = prog(w);
+    if (w.id !== shownId) {   // 새 카드: 토글은 처음 상태로(설정 keepToggles 면 그대로)
+      if (!S.keepToggles) view = { kana: !!S.showReading, mean: false };
+      shownId = w.id;
+      $('#sr').textContent = `새 카드: ${w.w}`;
+    }
     const chips = [`<span class="chip">${POS[w.p]}</span>`];
+    if (w.kc) chips.push('<span class="chip kichul">기출</span>');
     if (!e) chips.push('<span class="chip new">새 단어</span>');
     else if (isHard(w)) chips.push('<span class="chip hard">자주 틀림</span>');
-    const showR = revealed || S.showReading;
     html += `
-      <article class="card scroll${revealed ? ' open' : ''}" aria-live="polite">
+      <article class="card study scroll${view.kana ? ' kana-on' : ''}${view.mean ? ' mean-on' : ''}">
         <div class="card-top">${chips.join('')}
+          <button class="icon-btn" data-act="detail" data-id="${w.id}" aria-label="자세히 보기 · AI에게 묻기">${ICON.spark}</button>
           <button class="icon-btn" data-act="speak-word" aria-label="단어 발음 듣기">${ICON.speak}</button>
         </div>
-        <div class="face" data-act="reveal">
-          <div class="reading">${showR && w.r !== w.w ? esc(w.r) : ''}</div>
-          <div class="word" lang="ja">${esc(w.w)}</div>
-        </div>
-        ${revealed ? `
-        <div class="back">
+        <div class="face">
+          <div class="reading" lang="ja">${w.r !== w.w ? esc(w.r) : ''}</div>
+          <div class="word" lang="ja" style="--len:${[...w.w].length}">${esc(w.w)}</div>
           <p class="meaning">${esc(w.m)}</p>
-          <div class="ex">
-            <p class="ja" lang="ja">${highlight(w)}</p>
-            <button class="icon-btn" data-act="speak-ex" aria-label="예문 발음 듣기">${ICON.speak}</button>
-            <p class="ko">${esc(w.ko)}</p>
-          </div>
-          <button class="link" data-act="detail" data-id="${w.id}">${ICON.spark}자세히 보기 · AI에게 묻기</button>
-        </div>` : '<p class="hint">카드를 누르면 뜻과 예문이 나와요</p>'}
+        </div>
+        <div class="ex">
+          <p class="ja" lang="ja">${rubyHtml(w.exr, w)}</p>
+          <button class="icon-btn" data-act="speak-ex" aria-label="예문 발음 듣기">${ICON.speak}</button>
+          <p class="ko">${esc(w.ko)}</p>
+        </div>
       </article>
-      ${revealed ? `
+      <div class="toggles">
+        <button class="tg" data-act="kana" aria-pressed="${view.kana}"><span class="tg-kana" lang="ja" aria-hidden="true">あ</span>히라가나</button>
+        <button class="tg" data-act="mean" aria-pressed="${view.mean}">${ICON.bulb}의미</button>
+      </div>
       <div class="actions">
-        <button class="btn big ng" data-act="no">몰라요</button>
-        <button class="btn big ok" data-act="yes">알아요</button>
-      </div>` : `
-      <div class="actions one"><button class="btn big primary" data-act="reveal">뜻 보기</button></div>`}
-      <div class="sub">
-        <span>남은 카드 <b>${queue.length}</b> · 복습 ${reviewsLeft} · 새 단어 ${newLeft}</span>
-        ${undo ? '<button class="link" data-act="undo">되돌리기</button>' : ''}
+        <button class="btn ans ng" data-act="no">몰라요</button>
+        <button class="btn ans ok" data-act="yes">알아요</button>
       </div>`;
   }
-  view.innerHTML = html;
+  host.innerHTML = html;
   updateBadge();
 }
 
@@ -647,18 +733,22 @@ function updateBadge() {
   b.hidden = !queue.length; b.textContent = queue.length > 99 ? '99+' : queue.length;
 }
 
-$('#view-study').addEventListener('click', e => {
-  const el = e.target.closest('[data-act]'); if (!el) return;
-  const act = el.dataset.act, w = queue.length ? WORDS[queue[0]] : null;
-  if (act === 'reveal' && !revealed) { revealed = true; renderStudy(); }
-  else if (act === 'yes') answer(true);
+function studyAct(act, el) {
+  const w = queue.length ? WORDS[queue[0]] : null;
+  if (act === 'speak-word' && w) speak(w.r);
+  else if (act === 'speak-ex' && w) speak(w.ex);
+  else if (flashTimer) return;   // 뜻을 잠깐 보여 주는 동안은 답·토글·되돌리기를 받지 않는다
+  else if ((act === 'kana' || act === 'mean') && w) setView(act, !view[act]);
+  else if (act === 'yes') know();
   else if (act === 'no') answer(false);
   else if (act === 'undo') undoAnswer();
-  else if (act === 'speak-word' && w) speak(w.r);
-  else if (act === 'speak-ex' && w) speak(w.ex);
   else if (act === 'detail') openDetail(+el.dataset.id);
   else if (act === 'more-new') { daily().bonus = (D.bonus || 0) + 10; saveAll(); queueDirty = true; renderStudy(); }
   else if (act === 'go-quiz') switchTab('quiz');
+}
+$('#view-study').addEventListener('click', e => {
+  const el = e.target.closest('[data-act]');
+  if (el) studyAct(el.dataset.act, el);
 });
 
 /* ---------- 퀴즈 ---------- */
@@ -763,7 +853,7 @@ function renderQuiz() {
         <p class="verdict ${it.pick === it.id ? 'ok' : 'ng'}">${it.pick === it.id ? '정답이에요' : '틀렸어요'}</p>
         <div class="jw" lang="ja">${esc(w.w)}<small>${w.r !== w.w ? esc(w.r) : ''}</small></div>
         <div>${esc(w.m)}</div>
-        <p class="ja" lang="ja">${highlight(w)}</p>
+        <p class="ja" lang="ja">${rubyHtml(w.exr, w, false)}</p>
         <p class="ko">${esc(w.ko)}</p>
       </div>
       <div class="actions"><button class="btn" data-act="detail" data-id="${w.id}">자세히</button>
@@ -864,7 +954,7 @@ function openDetail(id) {
     </div>
     <p class="d-meaning">${esc(w.m)}</p>
     <div class="ex">
-      <p class="ja" lang="ja">${highlight(w)}</p>
+      <p class="ja" lang="ja">${rubyHtml(w.exr, w)}</p>
       <button class="icon-btn" data-act="speak" data-t="${esc(w.ex)}" aria-label="예문 발음 듣기">${ICON.speak}</button>
       <p class="ko">${esc(w.ko)}</p>
     </div>
@@ -1022,7 +1112,7 @@ function renderAI(w, kind, v, q) {
   let body = '';
   if (kind === 'examples') {
     body = asList(j.examples).slice(0, 5).map(x => `<div class="ai-card">
-      <p class="ja" lang="ja">${highlight(w, String(x.ja || ''))}</p>
+      <p class="ja" lang="ja">${rubyHtml(String(x.ja || ''), w, false)}</p>
       ${x.kana ? `<p class="kana" lang="ja">${esc(x.kana)}</p>` : ''}
       <p class="ko">${esc(x.ko || '')}</p>
       <div class="ai-meta"><span></span><button class="icon-btn" data-act="speak" data-t="${esc(x.ja || '')}" aria-label="예문 발음 듣기">${ICON.speak}</button></div></div>`).join('');
@@ -1064,6 +1154,8 @@ function fillSettings() {
   markSeg('#set-new', S.newPerDay);
   markSeg('#set-rate', S.rate);
   $('#set-reading').checked = !!S.showReading;
+  $('#set-keep').checked = !!S.keepToggles;
+  $('#set-flash').checked = !!S.flashOnKnow;
   $('#set-key').value = S.apiKey || '';
   $('#set-model').value = S.model;
   $('#import-box').hidden = true; $('#reset-confirm').hidden = true;
@@ -1078,7 +1170,9 @@ $('#set-rate').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
   S.rate = +b.dataset.v; saveSettings(); markSeg('#set-rate', S.rate); speak('はつおん');
 });
-$('#set-reading').addEventListener('change', e => { S.showReading = e.target.checked; saveSettings(); renderStudy(); });
+$('#set-reading').addEventListener('change', e => { S.showReading = e.target.checked; saveSettings(); if (queue.length) setView('kana', S.showReading); });
+$('#set-keep').addEventListener('change', e => { S.keepToggles = e.target.checked; saveSettings(); });
+$('#set-flash').addEventListener('change', e => { S.flashOnKnow = e.target.checked; saveSettings(); });
 $('#set-model').addEventListener('change', e => { S.model = e.target.value; saveSettings(); });
 $('#btn-key-save').addEventListener('click', () => {
   S.apiKey = $('#set-key').value.trim(); saveSettings();
@@ -1140,6 +1234,7 @@ $('#btn-install').addEventListener('click', async () => {
 
 /* ---------- 탭 ---------- */
 function switchTab(name) {
+  endFlash();
   S.tab = name; saveSettings();
   $$('.tab').forEach(t => t.setAttribute('aria-selected', String(t.dataset.tab === name)));
   ['study', 'quiz', 'list'].forEach(v => { $('#view-' + v).hidden = v !== name; });
@@ -1151,15 +1246,20 @@ function switchTab(name) {
 $$('.tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
 function renderAll() { renderStudy(); renderQuiz(); renderList(); }
 
+// 학습 키보드: ← 몰라요 · → 알아요 · H 히라가나 · M/Space 의미 · Z/Backspace 되돌리기 (한글 입력 상태에서도 되게 e.code)
+const STUDY_KEYS = { ArrowLeft: 'no', ArrowRight: 'yes', KeyH: 'kana', KeyM: 'mean', Space: 'mean', KeyZ: 'undo', Backspace: 'undo' };
 document.addEventListener('keydown', e => {
   if (S.tab !== 'study' || $('dialog[open]') || !e.target.closest) return;
-  if (e.target.closest('input,textarea,select')) return;
+  if (e.target.closest('input,textarea,select') || e.ctrlKey || e.metaKey || e.altKey) return;
   if ((e.key === ' ' || e.key === 'Enter') && e.target.closest('button,a,[tabindex]')) return;   // 포커스된 버튼 자신의 동작을 따른다
-  if ((e.key === ' ' || e.key === 'Enter') && !revealed && queue.length) { e.preventDefault(); revealed = true; renderStudy(); }
-  else if (revealed && e.key === 'ArrowLeft') answer(false);
-  else if (revealed && e.key === 'ArrowRight') answer(true);
+  const act = STUDY_KEYS[e.code];
+  if (!act || (!queue.length && act !== 'undo')) return;
+  e.preventDefault();
+  if (e.repeat && (act === 'yes' || act === 'no')) return;   // 길게 눌러도 한 장만 넘긴다
+  studyAct(act);
 });
 document.addEventListener('visibilitychange', () => {   // 자정을 넘겨 다시 열면 새 날 카드로
+  endFlash();
   if (document.visibilityState !== 'visible' || queueDay === today()) return;
   if (S.tab === 'study') renderStudy(); else { buildQueue(); updateBadge(); }
 });

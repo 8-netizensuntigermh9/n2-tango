@@ -25,7 +25,9 @@ def main():
             print("오류:", e)
         sys.exit(f"데이터 오류 {len(errors)}건 — 빌드 중단")
 
-    vocab = [[r["w"], r["r"], r["p"], r["m"], r["ex"], r["ko"]] for r in rows]
+    kichul = validate.kichul_keys()
+    # 7번째 값 1 = 기출 단어(data/kichul.list). 데이터 파일은 6칸 그대로 두고 빌드에서만 붙인다
+    vocab = [[r["w"], r["r"], r["p"], r["m"], r["ex"], r["ko"], int(f"{r['w']}|{r['r']}" in kichul)] for r in rows]
     # <script> 안에 넣으므로 "</script>" 가 생기지 않게 < 를 이스케이프한다
     vocab_json = json.dumps(vocab, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
     app = (SRC / "app.html").read_text(encoding="utf-8")
@@ -53,7 +55,7 @@ def main():
     (DIST / ".nojekyll").write_text("", encoding="utf-8")
 
     size = (DIST / "index.html").stat().st_size
-    print(f"빌드 완료: 단어 {len(rows)}개 · 버전 {version} · index.html {size / 1024:.0f}KB")
+    print(f"빌드 완료: 단어 {len(rows)}개(기출 {len(kichul)}) · 버전 {version} · index.html {size / 1024:.0f}KB")
 
 
 if __name__ == "__main__":

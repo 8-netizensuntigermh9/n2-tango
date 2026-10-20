@@ -1,0 +1,4 @@
+sudachipy
+sudachidict_core
+pykakasi
+playwright
