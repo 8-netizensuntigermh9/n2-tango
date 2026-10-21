@@ -158,6 +158,15 @@ def main():
         check("다음 카드(showReading ON): 히라가나 켜짐·의미 꺼짐", s6["kana"] == "true" and s6["mean"] == "false", str(s6))
         ev("S.showReading = false")
 
+        # ---- 남은 카드 1장에서 몰라요: 같은 카드가 다시 나와도 토글은 처음 상태 ----
+        ev("window.__rest = queue.slice(1); queue = queue.slice(0, 1); renderStudy()")
+        only = ev("queue[0]")
+        page.click("[data-act=mean]")
+        page.click("[data-act=no]")
+        s9 = ev(state)
+        check("남은 1장 몰라요: 같은 카드, 의미 꺼짐·#sr 「새 카드: …」", s9["id"] == only and s9["mean"] == "false" and s9["sr"].startswith("새 카드: "), str(s9))
+        ev("queue.push(...__rest); renderStudy()")
+
         # ---- 되돌리기: 카드·토글 복원, 자정 뒤 되돌리기는 재구성 없이 ----
         page.click("[data-act=mean]")
         before = ev(state)
@@ -190,6 +199,11 @@ def main():
         key("Space", " ")
         k3 = ev(state)
         check("키보드 H 히라가나 · M/Space 의미", k1["kana"] == "true" and k2["mean"] == "true" and k3["mean"] == "false", f"{k1['kana']} {k2['mean']} {k3['mean']}")
+        page.click("[data-act=kana]")   # 마우스로 토글을 누른 뒤의 Space 도 「의미」
+        page.keyboard.press("Space")
+        k4 = ev(state)
+        check("토글 클릭 뒤 Space = 의미(포커스 남지 않음)", k4["kana"] == "false" and k4["mean"] == "true", str(k4))
+        page.keyboard.press("Space")
         key("ArrowLeft", "ArrowLeft")
         check("키보드 ← 몰라요", ev("__a") == a0 + 1 and ev("queue[0]") != id0)
         key("KeyZ", "z")

@@ -42,10 +42,7 @@ SEED = """() => {
   localStorage.setItem('n2tango.settings', JSON.stringify({ newPerDay: 50, keepToggles: true, flashOnKnow: false, tab: 'study' }));
 }"""
 
-# 한 카드를 두 토글 ON 으로 띄운다(앱에 테스트 코드를 넣지 않고 queue 를 바꿔 renderStudy)
-SHOW = """id => { queue[0] = id; view = { kana: true, mean: true }; renderStudy(); }"""
-
-# 최악 카드 고르기: 모든 단어를 두 토글 ON 으로 그려 높이를 잰다
+# 최악 카드 고르기: 모든 단어를 두 토글 ON 으로 그려 높이를 잰다(앱에 테스트 코드를 넣지 않고 queue 를 바꿔 renderStudy)
 PICK = """extra => {
   const m = WORDS.map(w => {
     queue[0] = w.id; view = { kana: true, mean: true }; renderStudy();

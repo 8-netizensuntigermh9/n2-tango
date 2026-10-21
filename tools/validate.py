@@ -49,7 +49,7 @@ def ruby_errors(raw):
 
 
 def spans(raw):
-    """plain 기준 루비 덩어리 [(시작, 끝, 읽기)] 와 글자별 읽기 문자열 함수."""
+    """plain 기준 루비 덩어리 [(시작, 끝, 읽기)]."""
     out, pos, i = [], 0, 0
     for m in RUBY.finditer(raw):
         pos += m.start() - i

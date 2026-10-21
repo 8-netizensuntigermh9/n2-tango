@@ -164,7 +164,6 @@ mark rt { color: var(--mark-ink); }
 
 .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: clamp(8px, calc(var(--u) * 1.6), 14px); flex: none; }
 .toggles + .actions { margin-top: clamp(6px, var(--u), 10px); }
-.actions.one { grid-template-columns: 1fr; }
 .btn {
   border: 1px solid transparent; border-radius: 14px; min-height: 52px; padding: 0 16px; font-weight: 700; font-size: 16px;
   background: var(--surface); color: var(--ink); border-color: var(--line);
@@ -621,6 +620,7 @@ function answer(known) {
     queue.splice(Math.min(3, queue.length), 0, id);    // 몇 장 뒤에 다시
   }
   P[w.k] = e; saveAll();
+  shownId = null;   // 남은 카드가 1장이라 몰라요로 같은 카드가 바로 나와도 새 카드로 보고 토글을 처음 상태로
   renderStudy();
 }
 
@@ -748,7 +748,9 @@ function studyAct(act, el) {
 }
 $('#view-study').addEventListener('click', e => {
   const el = e.target.closest('[data-act]');
-  if (el) studyAct(el.dataset.act, el);
+  if (!el) return;
+  if (e.detail && el.classList.contains('tg')) el.blur();   // 마우스로 누른 토글에 포커스가 남으면 Space 가 「의미」 대신 그 토글을 누른다
+  studyAct(el.dataset.act, el);
 });
 
 /* ---------- 퀴즈 ---------- */

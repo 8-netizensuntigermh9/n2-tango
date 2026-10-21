@@ -15,13 +15,13 @@ import re
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import validate  # noqa: E402
+from validate import KANJI, KANJI_RUN, hira, plain  # noqa: E402  루비 규칙은 validate.py 한 곳에
+
 ROOT = Path(__file__).resolve().parent.parent
-DATA = ROOT / "data"
 FIX = Path(__file__).resolve().parent / "furigana_fix.txt"
 
-KANJI = "㐀-䶿一-鿿豈-﫿々〆ヶ"
-KANJI_RUN = re.compile(f"[{KANJI}]+")
-RUBY = re.compile(f"([{KANJI}]+)\\{{([^{{}}]*)\\}}")
 NUM = re.compile(r"[0-9０-９一二三四五六七八九十百千万何数幾]")
 # 숙자훈·다르게 읽는 낱말 — 들어 있으면 우선 검토
 JUKU = ["今日", "明日", "昨日", "一昨日", "明後日", "今朝", "今年", "今夜", "一人", "二人", "大人", "一日", "二日", "上手", "下手",
@@ -29,15 +29,6 @@ JUKU = ["今日", "明日", "昨日", "一昨日", "明後日", "今朝", "今�
         "二十歳", "目上", "人気", "方", "何", "大家", "生物", "市場", "最中", "日本", "分別", "寒気", "見物", "気質", "一人前",
         "仲人", "迷子", "息子", "博士", "姉さん", "兄さん", "下手", "心地", "田舎", "八百屋", "行方", "日中", "後", "間", "上", "下",
         "中", "前", "辺", "所", "者", "人", "身", "家", "工場", "変化", "一時", "一体", "一度", "一番", "一生", "一緒", "一層"]
-
-
-def hira(s):
-    return "".join(chr(ord(c) - 0x60) if "ァ" <= c <= "ヶ" else c for c in s)
-
-
-def plain(raw):
-    """루비 표기를 벗긴 문장."""
-    return RUBY.sub(r"\1", raw)
 
 
 def parts(surface):
@@ -197,8 +188,6 @@ def force_head(segs, row):
 
 
 def load_rows():
-    sys.path.insert(0, str(Path(__file__).resolve().parent))
-    import validate
     rows, errors = validate.load()
     if errors:
         sys.exit(f"validate 오류 {len(errors)}건 — 먼저 고친다")
